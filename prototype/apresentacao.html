@@ -1,0 +1,1454 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Proposta Técnica – Reconstrução ILC Log</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    /* =============================================
+       VARIÁVEIS E RESET
+    ============================================= */
+    :root {
+      --navy:    #0B2545;
+      --navy2:   #113a6b;
+      --gold:    #C8960C;
+      --gold2:   #dba81a;
+      --gray:    #64748b;
+      --light:   #f1f5f9;
+      --border:  #e2e8f0;
+      --text:    #1e293b;
+      --white:   #ffffff;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 10pt; }
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      background: #e8ecf0;
+      line-height: 1.6;
+    }
+
+    /* =============================================
+       PÁGINA (folha A4)
+    ============================================= */
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      background: var(--white);
+      margin: 0 auto 10mm;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0,0,0,.15);
+      page-break-after: always;
+    }
+
+    /* =============================================
+       CAPA
+    ============================================= */
+    .cover {
+      background: linear-gradient(160deg, var(--navy) 0%, var(--navy2) 60%, #0d4a8a 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 0;
+    }
+    .cover-top { padding: 14mm 14mm 0; }
+    .cover-logo {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .cover-logo-box {
+      width: 44px; height: 44px;
+      background: var(--gold);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-weight: 700; font-size: 18pt;
+      color: white;
+    }
+    .cover-logo-text p { color: white; font-size: 9pt; font-weight: 600; line-height: 1.3; }
+    .cover-logo-text .sub { color: var(--gold2); }
+
+    .cover-hero {
+      padding: 18mm 14mm 0;
+      flex: 1;
+    }
+    .cover-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(200,150,12,.2);
+      color: var(--gold2);
+      font-size: 7.5pt; font-weight: 700;
+      padding: 5px 12px; border-radius: 20px;
+      text-transform: uppercase; letter-spacing: .8px;
+      margin-bottom: 10mm;
+    }
+    .cover-badge::before { content:''; width:7px; height:7px; background:var(--gold2); border-radius:50%; }
+    .cover-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 36pt;
+      color: white;
+      line-height: 1.15;
+      margin-bottom: 7mm;
+    }
+    .cover-title span { color: var(--gold); }
+    .cover-sub {
+      color: rgba(180,210,255,.85);
+      font-size: 11pt;
+      max-width: 130mm;
+      line-height: 1.6;
+      margin-bottom: 14mm;
+    }
+    .cover-divider { width: 50px; height: 3px; background: var(--gold); margin-bottom: 10mm; }
+    .cover-meta {
+      display: flex; gap: 20mm; margin-bottom: 14mm;
+    }
+    .cover-meta-item label { color: rgba(180,210,255,.6); font-size: 7.5pt; text-transform: uppercase; letter-spacing: .6px; display: block; }
+    .cover-meta-item p { color: white; font-size: 9pt; font-weight: 600; margin-top: 2px; }
+
+    .cover-bottom {
+      background: rgba(0,0,0,.25);
+      padding: 7mm 14mm;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .cover-bottom p { color: rgba(180,210,255,.7); font-size: 8pt; }
+    .cover-domain { color: var(--gold2); font-weight: 700; font-size: 9pt; }
+
+    /* Decorative shapes */
+    .cover-circle1 {
+      position: absolute; top: -30mm; right: -20mm;
+      width: 90mm; height: 90mm;
+      background: rgba(255,255,255,.04);
+      border-radius: 50%;
+    }
+    .cover-circle2 {
+      position: absolute; bottom: 20mm; right: 10mm;
+      width: 50mm; height: 50mm;
+      background: rgba(200,150,12,.08);
+      border-radius: 50%;
+    }
+    .cover-lines {
+      position: absolute; top: 60mm; right: 14mm;
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    .cover-lines span {
+      display: block; height: 2px; background: rgba(200,150,12,.25); border-radius: 1px;
+    }
+
+    /* =============================================
+       SUMÁRIO
+    ============================================= */
+    .toc-page { padding: 14mm; }
+    .section-label {
+      font-size: 7.5pt; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1px; color: var(--gold); margin-bottom: 3mm;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 24pt; font-weight: 700;
+      color: var(--navy); margin-bottom: 8mm;
+    }
+    .gold-bar { width: 40px; height: 3px; background: var(--gold); margin-bottom: 10mm; }
+    .toc-list { list-style: none; }
+    .toc-item {
+      display: flex; align-items: flex-end;
+      padding: 4mm 0; border-bottom: 1px solid var(--border);
+      gap: 4mm;
+    }
+    .toc-num {
+      width: 26px; height: 26px;
+      background: var(--navy); color: white;
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 8pt; font-weight: 700; flex-shrink: 0;
+    }
+    .toc-num.gold { background: var(--gold); }
+    .toc-text { flex: 1; }
+    .toc-text strong { display: block; font-size: 10pt; color: var(--navy); font-weight: 600; }
+    .toc-text span { font-size: 8pt; color: var(--gray); }
+    .toc-dots { flex: 1; border-bottom: 1.5px dotted var(--border); margin-bottom: 3px; }
+    .toc-page-num { font-size: 9pt; color: var(--gray); font-weight: 500; }
+
+    /* =============================================
+       CONTEÚDO INTERNO
+    ============================================= */
+    .inner-page { padding: 14mm; display: flex; flex-direction: column; }
+    .page-header-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-bottom: 5mm; border-bottom: 2px solid var(--navy);
+      margin-bottom: 8mm;
+    }
+    .page-header-bar .brand { display: flex; align-items: center; gap: 8px; }
+    .brand-dot { width: 8px; height: 8px; background: var(--gold); border-radius: 50%; }
+    .brand-name { font-size: 8pt; color: var(--gray); font-weight: 500; }
+    .page-header-bar .pg { font-size: 8pt; color: var(--gray); }
+
+    /* Títulos internos */
+    h2.page-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 22pt; font-weight: 700; color: var(--navy);
+      margin-bottom: 2mm;
+    }
+    .page-subtitle { font-size: 9.5pt; color: var(--gray); margin-bottom: 8mm; }
+    h3.block-title {
+      font-size: 10.5pt; font-weight: 700; color: var(--navy);
+      margin-bottom: 3mm; padding-bottom: 2mm;
+      border-bottom: 1.5px solid var(--border);
+    }
+    h3.block-title.gold { border-color: var(--gold); color: var(--gold); }
+
+    /* Cards e grids */
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; }
+    .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4mm; }
+    .grid4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 3.5mm; }
+
+    .card {
+      border: 1.5px solid var(--border);
+      border-radius: 10px; padding: 5mm;
+    }
+    .card.navy { background: var(--navy); border-color: var(--navy); }
+    .card.gold-card { background: var(--gold); border-color: var(--gold); }
+    .card.light { background: var(--light); }
+    .card-label { font-size: 7pt; text-transform: uppercase; letter-spacing: .7px; color: var(--gray); margin-bottom: 1.5mm; }
+    .card-label.white { color: rgba(255,255,255,.6); }
+    .card-value { font-size: 11pt; font-weight: 700; color: var(--navy); }
+    .card-value.white { color: white; }
+    .card-value.gold { color: var(--gold); }
+    .card-desc { font-size: 8pt; color: var(--gray); margin-top: 1.5mm; line-height: 1.5; }
+    .card-desc.white { color: rgba(180,210,255,.8); }
+
+    /* Tabelas */
+    table { width: 100%; border-collapse: collapse; font-size: 8.5pt; }
+    thead tr { background: var(--navy); }
+    thead th { color: white; padding: 3mm 4mm; text-align: left; font-weight: 600; font-size: 8pt; }
+    thead th:first-child { border-radius: 6px 0 0 0; }
+    thead th:last-child  { border-radius: 0 6px 0 0; }
+    tbody tr { border-bottom: 1px solid var(--border); }
+    tbody tr:nth-child(even) { background: var(--light); }
+    tbody td { padding: 2.5mm 4mm; color: var(--text); vertical-align: top; }
+    .tag {
+      display: inline-block;
+      padding: 2px 7px; border-radius: 20px; font-size: 7pt; font-weight: 600;
+    }
+    .tag-gold  { background: rgba(200,150,12,.15); color: #8a6400; }
+    .tag-navy  { background: rgba(11,37,69,.1); color: var(--navy); }
+    .tag-green { background: rgba(22,163,74,.12); color: #166534; }
+    .tag-blue  { background: rgba(59,130,246,.12); color: #1d4ed8; }
+    .tag-purple{ background: rgba(147,51,234,.12); color: #7e22ce; }
+
+    /* Lista com check */
+    .check-list { list-style: none; }
+    .check-list li {
+      display: flex; align-items: flex-start; gap: 6px;
+      font-size: 8.5pt; color: var(--text); padding: 1.5mm 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .check-list li:last-child { border: none; }
+    .check-icon { color: var(--gold); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+
+    /* Info box */
+    .info-box {
+      background: var(--light); border-left: 4px solid var(--gold);
+      border-radius: 0 8px 8px 0; padding: 4mm 5mm; margin: 4mm 0;
+    }
+    .info-box p { font-size: 8.5pt; color: var(--text); line-height: 1.6; }
+    .info-box strong { color: var(--navy); }
+
+    /* DB schema */
+    .db-table {
+      border: 1.5px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 4mm;
+    }
+    .db-table-header {
+      background: var(--navy); padding: 3mm 5mm;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .db-table-header span { color: white; font-size: 8.5pt; font-weight: 700; }
+    .db-table-header small { color: var(--gold2); font-size: 7.5pt; }
+    .db-table-body { }
+    .db-col {
+      display: flex; align-items: center; gap: 4mm;
+      padding: 2mm 5mm; border-bottom: 1px solid var(--border); font-size: 8pt;
+    }
+    .db-col:last-child { border: none; }
+    .db-col:nth-child(even) { background: var(--light); }
+    .db-col-name { font-weight: 600; color: var(--navy); min-width: 40mm; }
+    .db-col-type { color: var(--gold); font-family: monospace; font-size: 7.5pt; min-width: 30mm; }
+    .db-col-desc { color: var(--gray); flex: 1; }
+    .pk-badge { background: var(--gold); color: white; font-size: 6.5pt; padding: 1px 5px; border-radius: 3px; font-weight: 700; }
+    .fk-badge { background: var(--navy2); color: white; font-size: 6.5pt; padding: 1px 5px; border-radius: 3px; font-weight: 700; }
+
+    /* Timeline -->
+    .timeline { position: relative; padding-left: 8mm; }
+    .timeline::before {
+      content:''; position:absolute; left:3mm; top:0; bottom:0;
+      width: 2px; background: var(--border);
+    }
+    .tl-item { position: relative; padding: 0 0 5mm 6mm; }
+    .tl-dot {
+      position: absolute; left: -9mm; top: 1mm;
+      width: 12px; height: 12px;
+      background: var(--gold); border-radius: 50%;
+      border: 2px solid white;
+      box-shadow: 0 0 0 2px var(--gold);
+    }
+    .tl-phase { font-size: 7pt; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: .6px; }
+    .tl-title { font-size: 10pt; font-weight: 700; color: var(--navy); margin: 1mm 0; }
+    .tl-desc { font-size: 8pt; color: var(--gray); line-height: 1.5; }
+    .tl-tags { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 2mm; }
+
+    /* Rodapé de página */
+    .page-footer {
+      margin-top: auto; padding-top: 5mm;
+      border-top: 1.5px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .page-footer p { font-size: 7.5pt; color: var(--gray); }
+    .footer-logo { display: flex; align-items: center; gap: 5px; }
+    .footer-logo-box { width: 18px; height: 18px; background: var(--navy); border-radius: 4px; display: flex; align-items:center; justify-content:center; }
+    .footer-logo-box span { color: var(--gold); font-size: 6pt; font-weight: 800; }
+
+    /* Seção de comparativo */
+    .compare-row {
+      display: grid; grid-template-columns: 1fr 2px 1fr; gap: 0;
+      align-items: stretch;
+    }
+    .compare-col { padding: 3mm 4mm; }
+    .compare-sep { background: var(--border); }
+    .compare-header { background: var(--navy); border-radius: 8px 8px 0 0; }
+    .compare-header .compare-col { display: flex; align-items: center; gap: 6px; }
+    .compare-header span { color: white; font-size: 9pt; font-weight: 700; }
+    .compare-body { border: 1.5px solid var(--border); border-top: none; border-radius: 0 0 8px 8px; }
+    .compare-item { border-bottom: 1px solid var(--border); }
+    .compare-item:last-child { border: none; }
+    .compare-bad { color: #dc2626; font-size: 8.5pt; }
+    .compare-good { color: #16a34a; font-size: 8.5pt; font-weight: 500; }
+
+    /* Imagens mockup (placeholder) */
+    .mockup-frame {
+      border: 2px solid var(--border); border-radius: 10px; overflow: hidden;
+      background: var(--light);
+    }
+    .mockup-bar {
+      background: var(--navy); height: 8mm; display: flex; align-items: center;
+      padding: 0 4mm; gap: 3px;
+    }
+    .mockup-dot { width: 7px; height: 7px; border-radius: 50%; }
+
+    /* =============================================
+       PRINT
+    ============================================= */
+    @media print {
+      body { background: white; }
+      .page {
+        margin: 0; box-shadow: none;
+        page-break-after: always;
+        width: 210mm; min-height: 297mm;
+      }
+    }
+    @page { size: A4; margin: 0; }
+
+    /* =============================================
+       BOTÃO IMPRIMIR (não aparece no PDF)
+    ============================================= */
+    .print-bar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 999;
+      background: var(--navy); padding: 10px 20px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .print-bar p { color: rgba(255,255,255,.8); font-size: 9pt; }
+    .print-btn {
+      background: var(--gold); color: white; border: none; cursor: pointer;
+      font-family: 'Inter', sans-serif; font-size: 9pt; font-weight: 700;
+      padding: 8px 20px; border-radius: 8px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .print-btn:hover { background: var(--gold2); }
+    .print-bar-space { height: 44px; }
+    @media print { .print-bar, .print-bar-space { display: none !important; } }
+  </style>
+</head>
+<body>
+
+<!-- BARRA DE IMPRESSÃO -->
+<div class="print-bar">
+  <p>📄 Proposta Técnica – Reconstrução ILC Log &nbsp;·&nbsp; <span style="color:rgba(200,150,12,1)">Abrir no Chrome/Edge → Ctrl+P → Salvar como PDF</span></p>
+  <button class="print-btn" onclick="window.print()">
+    <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+    Exportar PDF
+  </button>
+</div>
+<div class="print-bar-space"></div>
+
+
+<!-- ================================================
+     PÁGINA 1 – CAPA
+================================================ -->
+<div class="page cover">
+  <div class="cover-circle1"></div>
+  <div class="cover-circle2"></div>
+  <div class="cover-lines">
+    <span style="width:60px"></span>
+    <span style="width:40px"></span>
+    <span style="width:80px"></span>
+    <span style="width:30px"></span>
+    <span style="width:55px"></span>
+  </div>
+
+  <div class="cover-top">
+    <div class="cover-logo">
+      <div class="cover-logo-box">ILC</div>
+      <div class="cover-logo-text">
+        <p>Infraestrutura e Logística Conectada</p>
+        <p class="sub">ilclog.com</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="cover-hero">
+    <div class="cover-badge">Proposta Técnica · Engenharia Reversa</div>
+    <h1 class="cover-title">
+      Reconstrução do<br/>Site <span>ILC Log</span><br/>em Stack Moderna
+    </h1>
+    <p class="cover-sub">
+      Documentação completa de análise, regras de negócio, arquitetura de banco de dados e estratégia de reconstrução tecnológica do site ilclog.com.
+    </p>
+    <div class="cover-divider"></div>
+    <div class="cover-meta">
+      <div class="cover-meta-item">
+        <label>Data</label>
+        <p>Abril / 2026</p>
+      </div>
+      <div class="cover-meta-item">
+        <label>Versão</label>
+        <p>1.0 – Apresentação ao Cliente</p>
+      </div>
+      <div class="cover-meta-item">
+        <label>Site Analisado</label>
+        <p>ilclog.com</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="cover-bottom">
+    <p>Documento confidencial · Uso interno e cliente</p>
+    <span class="cover-domain">ilclog.com</span>
+  </div>
+</div>
+
+
+<!-- ================================================
+     PÁGINA 2 – SUMÁRIO
+================================================ -->
+<div class="page toc-page">
+  <div class="page-header-bar">
+    <div class="brand"><div class="brand-dot"></div><span class="brand-name">ILC – Proposta Técnica</span></div>
+    <span class="pg">Sumário</span>
+  </div>
+
+  <div class="section-label">Índice</div>
+  <h2 class="section-title">Sumário do Documento</h2>
+  <div class="gold-bar"></div>
+
+  <ul class="toc-list">
+    <li class="toc-item">
+      <div class="toc-num">1</div>
+      <div class="toc-text">
+        <strong>Visão Geral da Empresa</strong>
+        <span>Identidade, liderança, missão, visão e valores da ILC</span>
+      </div>
+      <div class="toc-dots"></div>
+      <span class="toc-page-num">3</span>
+    </li>
+    <li class="toc-item">
+      <div class="toc-num">2</div>
+      <div class="toc-text">
+        <strong>Análise do Site Atual</strong>
+        <span>Tecnologia identificada, estrutura de páginas e limitações</span>
+      </div>
+      <div class="toc-dots"></div>
+      <span class="toc-page-num">4</span>
+    </li>
+    <li class="toc-item">
+      <div class="toc-num">3</div>
+      <div class="toc-text">
+        <strong>Mapa Completo do Site</strong>
+        <span>Hierarquia de páginas, URLs e seções identificadas</span>
+      </div>
+      <div class="toc-dots"></div>
+      <span class="toc-page-num">5</span>
+    </li>
+    <li class="toc-item">
+      <div class="toc-num">4</div>
+      <div class="toc-text">
+        <strong>Regras de Negócio</strong>
+        <span>Lógica de acesso, membros, formulários, conteúdo e SEO</span>
+      </div>
+      <div class="toc-dots"></div>
+      <span class="toc-page-num">6</span>
+    </li>
+    <li class="toc-item">
+      <div class="toc-num">5</div>
+      <div class="toc-text">
+        <strong>Schema do Banco de Dados</strong>
+        <span>Modelagem PostgreSQL com 12 tabelas, índices e relações</span>
+      </div>
+      <div class="toc-dots"></div>
+      <span class="toc-page-num">7–8</span>
+    </li>
+    <li class="toc-item">
+      <div class="toc-num gold">6</div>
+      <div class="toc-text">
+        <strong>Stack Tecnológica Proposta</strong>
+        <span>Next.js 15, TypeScript, PostgreSQL, Supabase – justificativas</span>
+      </div>
+      <div class="toc-dots"></div>
+      <span class="toc-page-num">9</span>
+    </li>
+    <li class="toc-item">
+      <div class="toc-num gold">7</div>
+      <div class="toc-text">
+        <strong>Plano de Migração</strong>
+        <span>5 fases de implementação com entregas por fase</span>
+      </div>
+      <div class="toc-dots"></div>
+      <span class="toc-page-num">10</span>
+    </li>
+    <li class="toc-item">
+      <div class="toc-num gold">8</div>
+      <div class="toc-text">
+        <strong>Protótipos de Telas</strong>
+        <span>Wireframes das 6 páginas principais desenvolvidas</span>
+      </div>
+      <div class="toc-dots"></div>
+      <span class="toc-page-num">11</span>
+    </li>
+    <li class="toc-item">
+      <div class="toc-num">9</div>
+      <div class="toc-text">
+        <strong>Próximos Passos</strong>
+        <span>Ações imediatas e responsabilidades</span>
+      </div>
+      <div class="toc-dots"></div>
+      <span class="toc-page-num">12</span>
+    </li>
+  </ul>
+
+  <div class="info-box" style="margin-top: 8mm;">
+    <p><strong>Sobre este documento:</strong> Esta proposta foi elaborada a partir de análise completa do site ilclog.com via engenharia reversa, coletando estrutura de navegação, conteúdo, tecnologia e fluxos de negócio para embasar a reconstrução em plataforma moderna.</p>
+  </div>
+
+  <div class="page-footer">
+    <div class="footer-logo">
+      <div class="footer-logo-box"><span>ILC</span></div>
+      <p>ILC Infraestrutura e Logística Conectada · Proposta Técnica 2026</p>
+    </div>
+    <p>Pág. 2</p>
+  </div>
+</div>
+
+
+<!-- ================================================
+     PÁGINA 3 – VISÃO GERAL
+================================================ -->
+<div class="page inner-page">
+  <div class="page-header-bar">
+    <div class="brand"><div class="brand-dot"></div><span class="brand-name">ILC – Proposta Técnica</span></div>
+    <span class="pg">Seção 1</span>
+  </div>
+
+  <div class="section-label">Seção 01</div>
+  <h2 class="page-title">Visão Geral da Empresa</h2>
+  <p class="page-subtitle">Identidade, liderança e propósito estratégico da ILC</p>
+  <div class="gold-bar"></div>
+
+  <div class="grid2" style="margin-bottom:5mm">
+    <div>
+      <h3 class="block-title">Sobre a ILC</h3>
+      <p style="font-size:8.5pt;line-height:1.7;color:var(--gray)">
+        A ILC – Infraestrutura e Logística Conectada é o mais novo centro de inteligência e inovação em infraestrutura e logística do Brasil, surgida no período de recuperação econômica pós-COVID. Desenvolvem e transmitem conhecimento nos modais hidroviário, ferroviário e rodoviário.
+      </p>
+      <div style="margin-top:4mm">
+        <div style="font-size:8pt;color:var(--navy);font-weight:600;margin-bottom:1mm">📍 Sede</div>
+        <p style="font-size:8pt;color:var(--gray)">Centro Empresarial Norte, Sl 233/235<br/>SRTVN Qd. 701, Conj. C – Brasília/DF</p>
+      </div>
+      <div style="margin-top:3mm">
+        <div style="font-size:8pt;color:var(--navy);font-weight:600;margin-bottom:1mm">✉️ E-mail</div>
+        <p style="font-size:8pt;color:var(--gray)">gerencia.comercial@ilclog.com</p>
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="card navy">
+        <div class="card-label white">Missão</div>
+        <p style="font-size:8pt;color:rgba(180,210,255,.85);line-height:1.5;margin-top:1mm">Desenvolver e transmitir conhecimento em infraestrutura e logística com perspectiva integrada.</p>
+      </div>
+      <div class="card gold-card">
+        <div class="card-label" style="color:rgba(255,255,255,.7)">Visão</div>
+        <p style="font-size:8pt;color:rgba(255,255,255,.9);line-height:1.5;margin-top:1mm">Ser referência em soluções logísticas integradas, inteligentes e eficazes.</p>
+      </div>
+    </div>
+  </div>
+
+  <h3 class="block-title">Equipe de Liderança</h3>
+  <table style="margin-bottom:5mm">
+    <thead>
+      <tr>
+        <th>Nome</th><th>Cargo</th><th>Formação / Background</th><th>Telefone</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Adalberto Tokarski</strong></td>
+        <td><span class="tag tag-navy">Diretor Executivo (CEO)</span></td>
+        <td>Eng. Civil, MBA Regulação FGV · 15+ anos ANTAQ · Presidente ADECON</td>
+        <td>(61) 99942-1123</td>
+      </tr>
+      <tr>
+        <td><strong>Edeon Vaz Ferreira</strong></td>
+        <td><span class="tag tag-gold">Diretor Financeiro (CFO)</span></td>
+        <td>Administrador · 40+ anos logística agronegócio · Dir. Pró-Logística MT</td>
+        <td>(61) 98111-9889</td>
+      </tr>
+      <tr>
+        <td><strong>Fabianne Ferreira</strong></td>
+        <td><span class="tag tag-blue">Gerente Comercial</span></td>
+        <td>Responsável pela gestão comercial e atendimento ao cliente</td>
+        <td>(61) 99325-9222</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 class="block-title">Público-Alvo e Serviços</h3>
+  <div class="grid4">
+    <div class="card light" style="text-align:center">
+      <div style="font-size:18pt;margin-bottom:2mm">🏢</div>
+      <div style="font-size:8pt;font-weight:600;color:var(--navy)">Empresas de Infraestrutura</div>
+    </div>
+    <div class="card light" style="text-align:center">
+      <div style="font-size:18pt;margin-bottom:2mm">💰</div>
+      <div style="font-size:8pt;font-weight:600;color:var(--navy)">Fundos de Investimento</div>
+    </div>
+    <div class="card light" style="text-align:center">
+      <div style="font-size:18pt;margin-bottom:2mm">📊</div>
+      <div style="font-size:8pt;font-weight:600;color:var(--navy)">Consultorias</div>
+    </div>
+    <div class="card light" style="text-align:center">
+      <div style="font-size:18pt;margin-bottom:2mm">🏛️</div>
+      <div style="font-size:8pt;font-weight:600;color:var(--navy)">Inst. Governamentais</div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <div class="footer-logo">
+      <div class="footer-logo-box"><span>ILC</span></div>
+      <p>ILC Infraestrutura e Logística Conectada · Proposta Técnica 2026</p>
+    </div>
+    <p>Pág. 3</p>
+  </div>
+</div>
+
+
+<!-- ================================================
+     PÁGINA 4 – ANÁLISE DO SITE ATUAL
+================================================ -->
+<div class="page inner-page">
+  <div class="page-header-bar">
+    <div class="brand"><div class="brand-dot"></div><span class="brand-name">ILC – Proposta Técnica</span></div>
+    <span class="pg">Seção 2</span>
+  </div>
+
+  <div class="section-label">Seção 02</div>
+  <h2 class="page-title">Análise do Site Atual</h2>
+  <p class="page-subtitle">Tecnologia identificada por engenharia reversa e principais limitações</p>
+  <div class="gold-bar"></div>
+
+  <div class="grid2" style="margin-bottom:5mm">
+    <div>
+      <h3 class="block-title">Tecnologia Identificada</h3>
+      <table>
+        <thead><tr><th>Componente</th><th>Tecnologia</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>CMS</td><td><strong>WordPress</strong></td><td><span class="tag tag-gold">Legado</span></td></tr>
+          <tr><td>Formulários</td><td>WPForms Lite</td><td><span class="tag tag-gold">Plugin</span></td></tr>
+          <tr><td>Autenticação</td><td>WordPress nativo</td><td><span class="tag tag-gold">Limitado</span></td></tr>
+          <tr><td>Área de membros</td><td>WP Members</td><td><span class="tag tag-gold">Plugin</span></td></tr>
+          <tr><td>SEO</td><td>Presumido Yoast</td><td><span class="tag tag-gold">Plugin</span></td></tr>
+          <tr><td>Banco de dados</td><td>MySQL (via WP)</td><td><span class="tag tag-gold">Acoplado</span></td></tr>
+          <tr><td>API</td><td>Não estruturada</td><td><span class="tag tag-gold">Ausente</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <h3 class="block-title">Métricas de Conteúdo</h3>
+      <div class="grid2" style="gap:3mm">
+        <div class="card light">
+          <div class="card-label">Posts / Notícias</div>
+          <div class="card-value">9</div>
+        </div>
+        <div class="card light">
+          <div class="card-label">Páginas estáticas</div>
+          <div class="card-value">7</div>
+        </div>
+        <div class="card light">
+          <div class="card-label">Trilhas Mastermind</div>
+          <div class="card-value">5</div>
+        </div>
+        <div class="card navy">
+          <div class="card-label white">Sessões Mastermind</div>
+          <div class="card-value gold">120+</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3 class="block-title">Comparativo: WordPress Atual × Nova Stack Proposta</h3>
+  <div class="compare-row">
+    <div class="compare-header" style="background:var(--navy);border-radius:8px 0 0 0;padding:3mm 4mm;display:flex;align-items:center;gap:6px">
+      <span style="color:rgba(255,255,255,.5);font-size:9pt;font-weight:700">⚠ WordPress (Atual)</span>
+    </div>
+    <div class="compare-sep"></div>
+    <div class="compare-header" style="background:var(--gold);border-radius:0 8px 0 0;padding:3mm 4mm;display:flex;align-items:center;gap:6px">
+      <span style="color:white;font-size:9pt;font-weight:700">✦ Next.js 15 + Supabase (Novo)</span>
+    </div>
+  </div>
+  <div style="border:1.5px solid var(--border);border-top:none;border-radius:0 0 8px 8px">
+    <div style="display:grid;grid-template-columns:1fr 1px 1fr">
+      <div style="padding:2.5mm 4mm;border-bottom:1px solid var(--border)"><span class="compare-bad">✗ Monolítico, difícil de escalar</span></div>
+      <div style="background:var(--border)"></div>
+      <div style="padding:2.5mm 4mm;border-bottom:1px solid var(--border)"><span class="compare-good">✓ Headless, serverless, Edge-ready</span></div>
+
+      <div style="padding:2.5mm 4mm;border-bottom:1px solid var(--border)"><span class="compare-bad">✗ Performance afetada por plugins</span></div>
+      <div style="background:var(--border)"></div>
+      <div style="padding:2.5mm 4mm;border-bottom:1px solid var(--border)"><span class="compare-good">✓ Core Web Vitals excelentes (SSG/ISR)</span></div>
+
+      <div style="padding:2.5mm 4mm;border-bottom:1px solid var(--border)"><span class="compare-bad">✗ Vulnerável a exploits de plugins</span></div>
+      <div style="background:var(--border)"></div>
+      <div style="padding:2.5mm 4mm;border-bottom:1px solid var(--border)"><span class="compare-good">✓ Auth.js + RLS + TypeScript 100%</span></div>
+
+      <div style="padding:2.5mm 4mm;border-bottom:1px solid var(--border)"><span class="compare-bad">✗ Admin genérico (wp-admin)</span></div>
+      <div style="background:var(--border)"></div>
+      <div style="padding:2.5mm 4mm;border-bottom:1px solid var(--border)"><span class="compare-good">✓ Painel administrativo customizado</span></div>
+
+      <div style="padding:2.5mm 4mm"><span class="compare-bad">✗ Sem TypeScript / API estruturada</span></div>
+      <div style="background:var(--border)"></div>
+      <div style="padding:2.5mm 4mm"><span class="compare-good">✓ TypeScript + REST API + CI/CD</span></div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <div class="footer-logo">
+      <div class="footer-logo-box"><span>ILC</span></div>
+      <p>ILC Infraestrutura e Logística Conectada · Proposta Técnica 2026</p>
+    </div>
+    <p>Pág. 4</p>
+  </div>
+</div>
+
+
+<!-- ================================================
+     PÁGINA 5 – MAPA DO SITE + REGRAS DE NEGÓCIO
+================================================ -->
+<div class="page inner-page">
+  <div class="page-header-bar">
+    <div class="brand"><div class="brand-dot"></div><span class="brand-name">ILC – Proposta Técnica</span></div>
+    <span class="pg">Seções 3 e 4</span>
+  </div>
+
+  <div class="section-label">Seção 03</div>
+  <h2 class="page-title">Mapa do Site & Regras de Negócio</h2>
+  <p class="page-subtitle">Estrutura de páginas e principais regras que guiam o sistema</p>
+  <div class="gold-bar"></div>
+
+  <div class="grid2" style="margin-bottom:5mm">
+    <div>
+      <h3 class="block-title">Hierarquia de Páginas</h3>
+      <div style="font-size:8pt;line-height:2;font-family:monospace;color:var(--text);background:var(--light);padding:4mm;border-radius:8px;border:1px solid var(--border)">
+        <span style="color:var(--gold);font-weight:700">ilclog.com/</span><br/>
+        ├── Home (/)<br/>
+        ├── <span style="color:var(--gold);font-weight:700">MASTERMIND</span> 🔒 <span style="color:var(--gray)">[membros]</span><br/>
+        │   ├── infra-2023/ (sessões + PDFs)<br/>
+        │   ├── infra-2024/ (sessões + PDFs)<br/>
+        │   ├── infra-2025/ (sessões + PDFs)<br/>
+        │   ├── infra-2026/ (sessões + PDFs)<br/>
+        │   └── portos/     (sessões + PDFs)<br/>
+        ├── servicos/<br/>
+        │   ├── gestao-de-projetos-estrategicos/<br/>
+        │   ├── consultoria-personalizada/<br/>
+        │   ├── treinamento-e-palestras-tecnicas/<br/>
+        │   └── defesa-de-pautas-e-projetos/<br/>
+        ├── quem-somos/<br/>
+        ├── contato/<br/>
+        ├── redes-sociais/<br/>
+        ├── login/ + password-reset/<br/>
+        └── category/noticias/ (9 posts)
+      </div>
+    </div>
+    <div>
+      <h3 class="block-title">Regras de Negócio Principais</h3>
+      <ul class="check-list">
+        <li><span class="check-icon">●</span><div><strong style="font-size:8.5pt">RN-01 Acesso Mastermind:</strong><br/><span style="color:var(--gray)">Todo conteúdo das trilhas é restrito. Não autenticado → redirect /login.</span></div></li>
+        <li><span class="check-icon">●</span><div><strong style="font-size:8.5pt">RN-02 Serviços sem preço:</strong><br/><span style="color:var(--gray)">Sem precificação pública. CTA sempre direciona para /contato.</span></div></li>
+        <li><span class="check-icon">●</span><div><strong style="font-size:8.5pt">RN-03 Home exibe 3 posts recentes:</strong><br/><span style="color:var(--gray)">Seção de notícias exibe os 3 artigos com maior data de publicação.</span></div></li>
+        <li><span class="check-icon">●</span><div><strong style="font-size:8.5pt">RN-04 Formulário de contato:</strong><br/><span style="color:var(--gray)">Nome* e E-mail* obrigatórios. Validação client+server. Notifica gerencia.comercial@ilclog.com.</span></div></li>
+        <li><span class="check-icon">●</span><div><strong style="font-size:8.5pt">RN-05 PDFs protegidos:</strong><br/><span style="color:var(--gray)">URLs temporárias (5 min) geradas no servidor. Sem acesso direto sem auth.</span></div></li>
+        <li><span class="check-icon">●</span><div><strong style="font-size:8.5pt">RN-06 Roles de usuário:</strong><br/><span style="color:var(--gray)">admin · editor · member · visitante. Sem self-registration pública.</span></div></li>
+        <li><span class="check-icon">●</span><div><strong style="font-size:8.5pt">RN-07 Reset de senha:</strong><br/><span style="color:var(--gray)">Token enviado por e-mail com validade de 24 horas.</span></div></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="grid4">
+    <div class="card navy" style="text-align:center;padding:4mm">
+      <div style="font-size:9pt;color:rgba(180,210,255,.7);margin-bottom:1mm">Páginas públicas</div>
+      <div style="font-size:20pt;font-weight:800;color:white">7</div>
+    </div>
+    <div class="card navy" style="text-align:center;padding:4mm">
+      <div style="font-size:9pt;color:rgba(180,210,255,.7);margin-bottom:1mm">Sessões protegidas</div>
+      <div style="font-size:20pt;font-weight:800;color:var(--gold)">120+</div>
+    </div>
+    <div class="card navy" style="text-align:center;padding:4mm">
+      <div style="font-size:9pt;color:rgba(180,210,255,.7);margin-bottom:1mm">Trilhas Mastermind</div>
+      <div style="font-size:20pt;font-weight:800;color:white">5</div>
+    </div>
+    <div class="card navy" style="text-align:center;padding:4mm">
+      <div style="font-size:9pt;color:rgba(180,210,255,.7);margin-bottom:1mm">Roles de usuário</div>
+      <div style="font-size:20pt;font-weight:800;color:white">4</div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <div class="footer-logo">
+      <div class="footer-logo-box"><span>ILC</span></div>
+      <p>ILC Infraestrutura e Logística Conectada · Proposta Técnica 2026</p>
+    </div>
+    <p>Pág. 5</p>
+  </div>
+</div>
+
+
+<!-- ================================================
+     PÁGINA 6 – BANCO DE DADOS (parte 1)
+================================================ -->
+<div class="page inner-page">
+  <div class="page-header-bar">
+    <div class="brand"><div class="brand-dot"></div><span class="brand-name">ILC – Proposta Técnica</span></div>
+    <span class="pg">Seção 5 · Parte 1/2</span>
+  </div>
+
+  <div class="section-label">Seção 05</div>
+  <h2 class="page-title">Schema do Banco de Dados</h2>
+  <p class="page-subtitle">Modelagem PostgreSQL — tabelas principais (1/2)</p>
+  <div class="gold-bar"></div>
+
+  <div class="grid2" style="margin-bottom:4mm">
+    <!-- users -->
+    <div class="db-table">
+      <div class="db-table-header">
+        <span>users</span><small>Autenticação e roles</small>
+      </div>
+      <div class="db-table-body">
+        <div class="db-col"><span class="pk-badge">PK</span><span class="db-col-name">id</span><span class="db-col-type">UUID</span><span class="db-col-desc">Identificador único</span></div>
+        <div class="db-col"><span class="db-col-name">name</span><span class="db-col-type">VARCHAR(100)</span><span class="db-col-desc">Nome completo</span></div>
+        <div class="db-col"><span class="db-col-name">email</span><span class="db-col-type">VARCHAR(255)</span><span class="db-col-desc">E-mail único</span></div>
+        <div class="db-col"><span class="db-col-name">password_hash</span><span class="db-col-type">VARCHAR(255)</span><span class="db-col-desc">Hash bcrypt</span></div>
+        <div class="db-col"><span class="db-col-name">role</span><span class="db-col-type">VARCHAR(20)</span><span class="db-col-desc">admin | editor | member</span></div>
+        <div class="db-col"><span class="db-col-name">is_active</span><span class="db-col-type">BOOLEAN</span><span class="db-col-desc">Conta ativa/inativa</span></div>
+        <div class="db-col"><span class="db-col-name">reset_token</span><span class="db-col-type">VARCHAR(255)</span><span class="db-col-desc">Token de redefinição</span></div>
+        <div class="db-col"><span class="db-col-name">reset_expires</span><span class="db-col-type">TIMESTAMPTZ</span><span class="db-col-desc">Expiração do token (24h)</span></div>
+      </div>
+    </div>
+
+    <!-- posts -->
+    <div class="db-table">
+      <div class="db-table-header">
+        <span>posts</span><small>Blog / Notícias</small>
+      </div>
+      <div class="db-table-body">
+        <div class="db-col"><span class="pk-badge">PK</span><span class="db-col-name">id</span><span class="db-col-type">UUID</span><span class="db-col-desc">Identificador único</span></div>
+        <div class="db-col"><span class="db-col-name">slug</span><span class="db-col-type">VARCHAR(300)</span><span class="db-col-desc">URL amigável (único)</span></div>
+        <div class="db-col"><span class="db-col-name">title</span><span class="db-col-type">VARCHAR(300)</span><span class="db-col-desc">Título do post</span></div>
+        <div class="db-col"><span class="db-col-name">excerpt</span><span class="db-col-type">TEXT</span><span class="db-col-desc">Resumo para listagens</span></div>
+        <div class="db-col"><span class="db-col-name">content</span><span class="db-col-type">TEXT</span><span class="db-col-desc">Conteúdo HTML/Markdown</span></div>
+        <div class="db-col"><span class="fk-badge">FK</span><span class="db-col-name">author_id</span><span class="db-col-type">UUID</span><span class="db-col-desc">→ users.id</span></div>
+        <div class="db-col"><span class="fk-badge">FK</span><span class="db-col-name">category_id</span><span class="db-col-type">UUID</span><span class="db-col-desc">→ categories.id</span></div>
+        <div class="db-col"><span class="db-col-name">status</span><span class="db-col-type">VARCHAR(20)</span><span class="db-col-desc">draft | published | archived</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <!-- mastermind_sessions -->
+    <div class="db-table">
+      <div class="db-table-header">
+        <span>mastermind_sessions</span><small>Sessões individuais</small>
+      </div>
+      <div class="db-table-body">
+        <div class="db-col"><span class="pk-badge">PK</span><span class="db-col-name">id</span><span class="db-col-type">UUID</span><span class="db-col-desc">Identificador único</span></div>
+        <div class="db-col"><span class="fk-badge">FK</span><span class="db-col-name">track_id</span><span class="db-col-type">UUID</span><span class="db-col-desc">→ mastermind_tracks.id</span></div>
+        <div class="db-col"><span class="db-col-name">slug</span><span class="db-col-type">VARCHAR(300)</span><span class="db-col-desc">URL amigável (único)</span></div>
+        <div class="db-col"><span class="db-col-name">title</span><span class="db-col-type">VARCHAR(300)</span><span class="db-col-desc">Título da sessão</span></div>
+        <div class="db-col"><span class="db-col-name">session_date</span><span class="db-col-type">DATE</span><span class="db-col-desc">Data de realização</span></div>
+        <div class="db-col"><span class="db-col-name">speaker_name</span><span class="db-col-type">VARCHAR(200)</span><span class="db-col-desc">Nome do palestrante</span></div>
+        <div class="db-col"><span class="db-col-name">video_url</span><span class="db-col-type">TEXT</span><span class="db-col-desc">YouTube / Vimeo embed</span></div>
+        <div class="db-col"><span class="db-col-name">is_published</span><span class="db-col-type">BOOLEAN</span><span class="db-col-desc">Visível para membros</span></div>
+      </div>
+    </div>
+
+    <!-- contacts -->
+    <div class="db-table">
+      <div class="db-table-header">
+        <span>contacts</span><small>Formulário de contato</small>
+      </div>
+      <div class="db-table-body">
+        <div class="db-col"><span class="pk-badge">PK</span><span class="db-col-name">id</span><span class="db-col-type">UUID</span><span class="db-col-desc">Identificador único</span></div>
+        <div class="db-col"><span class="db-col-name">first_name</span><span class="db-col-type">VARCHAR(100)</span><span class="db-col-desc">Nome (obrigatório)</span></div>
+        <div class="db-col"><span class="db-col-name">last_name</span><span class="db-col-type">VARCHAR(100)</span><span class="db-col-desc">Sobrenome (opcional)</span></div>
+        <div class="db-col"><span class="db-col-name">email</span><span class="db-col-type">VARCHAR(255)</span><span class="db-col-desc">E-mail (obrigatório)</span></div>
+        <div class="db-col"><span class="db-col-name">message</span><span class="db-col-type">TEXT</span><span class="db-col-desc">Mensagem (opcional)</span></div>
+        <div class="db-col"><span class="db-col-name">status</span><span class="db-col-type">VARCHAR(20)</span><span class="db-col-desc">new | read | replied | archived</span></div>
+        <div class="db-col"><span class="db-col-name">ip_address</span><span class="db-col-type">INET</span><span class="db-col-desc">Anti-spam / auditoria</span></div>
+        <div class="db-col"><span class="db-col-name">created_at</span><span class="db-col-type">TIMESTAMPTZ</span><span class="db-col-desc">Data/hora do envio</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <div class="footer-logo">
+      <div class="footer-logo-box"><span>ILC</span></div>
+      <p>ILC Infraestrutura e Logística Conectada · Proposta Técnica 2026</p>
+    </div>
+    <p>Pág. 6</p>
+  </div>
+</div>
+
+
+<!-- ================================================
+     PÁGINA 7 – BANCO DE DADOS (parte 2)
+================================================ -->
+<div class="page inner-page">
+  <div class="page-header-bar">
+    <div class="brand"><div class="brand-dot"></div><span class="brand-name">ILC – Proposta Técnica</span></div>
+    <span class="pg">Seção 5 · Parte 2/2</span>
+  </div>
+
+  <div class="section-label">Seção 05 — continuação</div>
+  <h2 class="page-title">Schema do Banco de Dados</h2>
+  <p class="page-subtitle">Tabelas complementares e visão geral do modelo relacional (2/2)</p>
+  <div class="gold-bar"></div>
+
+  <div class="grid2" style="margin-bottom:4mm">
+    <!-- mastermind_tracks -->
+    <div class="db-table">
+      <div class="db-table-header">
+        <span>mastermind_tracks</span><small>Trilhas / Edições</small>
+      </div>
+      <div class="db-table-body">
+        <div class="db-col"><span class="pk-badge">PK</span><span class="db-col-name">id</span><span class="db-col-type">UUID</span><span class="db-col-desc">Identificador único</span></div>
+        <div class="db-col"><span class="db-col-name">slug</span><span class="db-col-type">VARCHAR(200)</span><span class="db-col-desc">URL amigável (único)</span></div>
+        <div class="db-col"><span class="db-col-name">title</span><span class="db-col-type">VARCHAR(200)</span><span class="db-col-desc">Ex: "Infra 2024", "Portos"</span></div>
+        <div class="db-col"><span class="db-col-name">year</span><span class="db-col-type">INTEGER</span><span class="db-col-desc">NULL para trilhas temáticas</span></div>
+        <div class="db-col"><span class="db-col-name">track_type</span><span class="db-col-type">VARCHAR(20)</span><span class="db-col-desc">infra | portos | ferrovias</span></div>
+        <div class="db-col"><span class="db-col-name">is_active</span><span class="db-col-type">BOOLEAN</span><span class="db-col-desc">Exibir no site</span></div>
+      </div>
+    </div>
+    <!-- session_pdfs -->
+    <div class="db-table">
+      <div class="db-table-header">
+        <span>session_pdfs</span><small>Materiais por sessão</small>
+      </div>
+      <div class="db-table-body">
+        <div class="db-col"><span class="pk-badge">PK</span><span class="db-col-name">id</span><span class="db-col-type">UUID</span><span class="db-col-desc">Identificador único</span></div>
+        <div class="db-col"><span class="fk-badge">FK</span><span class="db-col-name">session_id</span><span class="db-col-type">UUID</span><span class="db-col-desc">→ mastermind_sessions.id</span></div>
+        <div class="db-col"><span class="db-col-name">title</span><span class="db-col-type">VARCHAR(300)</span><span class="db-col-desc">Nome do arquivo</span></div>
+        <div class="db-col"><span class="db-col-name">file_url</span><span class="db-col-type">TEXT</span><span class="db-col-desc">URL no storage (Supabase)</span></div>
+        <div class="db-col"><span class="db-col-name">file_size_kb</span><span class="db-col-type">INTEGER</span><span class="db-col-desc">Tamanho do arquivo</span></div>
+        <div class="db-col"><span class="db-col-name">sort_order</span><span class="db-col-type">INTEGER</span><span class="db-col-desc">Ordenação na listagem</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Resumo das tabelas -->
+  <h3 class="block-title">Resumo Completo das 12 Tabelas</h3>
+  <table>
+    <thead><tr><th>Tabela</th><th>Finalidade</th><th>Relações</th></tr></thead>
+    <tbody>
+      <tr><td><code>users</code></td><td>Autenticação, roles e recuperação de senha</td><td>→ posts</td></tr>
+      <tr><td><code>team_members</code></td><td>Equipe pública (diretores e gerentes)</td><td>→ social_links</td></tr>
+      <tr><td><code>social_links</code></td><td>Links de redes sociais por entidade</td><td>← team_members</td></tr>
+      <tr><td><code>services</code></td><td>Catálogo dos 4 serviços da ILC</td><td>standalone</td></tr>
+      <tr><td><code>categories</code></td><td>Categorias de posts (ex: Notícias)</td><td>→ posts</td></tr>
+      <tr><td><code>posts</code></td><td>Artigos do blog / notícias</td><td>← users, categories</td></tr>
+      <tr><td><code>mastermind_tracks</code></td><td>Trilhas (Infra 2023–2026, Portos)</td><td>→ sessions</td></tr>
+      <tr><td><code>mastermind_sessions</code></td><td>Sessões individuais por trilha</td><td>← tracks, → pdfs</td></tr>
+      <tr><td><code>session_pdfs</code></td><td>PDFs associados a cada sessão</td><td>← sessions</td></tr>
+      <tr><td><code>session_post_links</code></td><td>N:N entre sessões e posts relacionados</td><td>← sessions + posts</td></tr>
+      <tr><td><code>contacts</code></td><td>Mensagens do formulário de contato</td><td>standalone</td></tr>
+      <tr><td><code>site_settings</code></td><td>Configurações globais (chave-valor)</td><td>standalone</td></tr>
+    </tbody>
+  </table>
+
+  <div class="page-footer">
+    <div class="footer-logo">
+      <div class="footer-logo-box"><span>ILC</span></div>
+      <p>ILC Infraestrutura e Logística Conectada · Proposta Técnica 2026</p>
+    </div>
+    <p>Pág. 7</p>
+  </div>
+</div>
+
+
+<!-- ================================================
+     PÁGINA 8 – STACK TECNOLÓGICA
+================================================ -->
+<div class="page inner-page">
+  <div class="page-header-bar">
+    <div class="brand"><div class="brand-dot"></div><span class="brand-name">ILC – Proposta Técnica</span></div>
+    <span class="pg">Seção 6</span>
+  </div>
+
+  <div class="section-label">Seção 06</div>
+  <h2 class="page-title">Stack Tecnológica Proposta</h2>
+  <p class="page-subtitle">Escolhas técnicas justificadas para a nova plataforma ILC Log</p>
+  <div class="gold-bar"></div>
+
+  <div class="grid2" style="margin-bottom:4mm">
+    <div>
+      <h3 class="block-title">Frontend & Framework</h3>
+      <table>
+        <thead><tr><th>Tecnologia</th><th>Versão</th><th>Papel</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Next.js</strong></td><td><span class="tag tag-green">15</span></td><td>Framework SSR/SSG/ISR + App Router</td></tr>
+          <tr><td><strong>TypeScript</strong></td><td><span class="tag tag-green">5.x</span></td><td>Tipagem estática, 100% do código</td></tr>
+          <tr><td><strong>Tailwind CSS</strong></td><td><span class="tag tag-green">4.x</span></td><td>Utility-first, bundle otimizado</td></tr>
+          <tr><td><strong>shadcn/ui</strong></td><td>latest</td><td>Componentes acessíveis e customizáveis</td></tr>
+          <tr><td><strong>Framer Motion</strong></td><td>11.x</td><td>Animações profissionais</td></tr>
+          <tr><td><strong>React Hook Form + Zod</strong></td><td>latest</td><td>Formulários validados e type-safe</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <h3 class="block-title">Backend & Dados</h3>
+      <table>
+        <thead><tr><th>Tecnologia</th><th>Versão</th><th>Papel</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Next.js API Routes</strong></td><td>15</td><td>Serverless API no mesmo repositório</td></tr>
+          <tr><td><strong>Drizzle ORM</strong></td><td>latest</td><td>ORM type-safe + migrations nativas</td></tr>
+          <tr><td><strong>PostgreSQL / Supabase</strong></td><td>—</td><td>Banco managed, gratuito até 500MB</td></tr>
+          <tr><td><strong>Auth.js v5</strong></td><td>5.x</td><td>Autenticação JWT + roles + sessões</td></tr>
+          <tr><td><strong>Resend + React Email</strong></td><td>latest</td><td>E-mails transacionais modernos</td></tr>
+          <tr><td><strong>Supabase Storage</strong></td><td>—</td><td>PDFs e imagens com controle de acesso</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h3 class="block-title">Infraestrutura & Deploy</h3>
+  <div class="grid4" style="margin-bottom:4mm">
+    <div class="card light" style="text-align:center;padding:4mm">
+      <div style="font-size:18pt;margin-bottom:2mm">▲</div>
+      <div style="font-size:8.5pt;font-weight:700;color:var(--navy)">Vercel</div>
+      <div style="font-size:7.5pt;color:var(--gray)">Deploy zero-config, Edge Network global</div>
+    </div>
+    <div class="card light" style="text-align:center;padding:4mm">
+      <div style="font-size:18pt;margin-bottom:2mm">🔧</div>
+      <div style="font-size:8.5pt;font-weight:700;color:var(--navy)">GitHub Actions</div>
+      <div style="font-size:7.5pt;color:var(--gray)">CI/CD automático, testes + lint</div>
+    </div>
+    <div class="card light" style="text-align:center;padding:4mm">
+      <div style="font-size:18pt;margin-bottom:2mm">☁️</div>
+      <div style="font-size:8.5pt;font-weight:700;color:var(--navy)">Cloudflare</div>
+      <div style="font-size:7.5pt;color:var(--gray)">CDN gratuito + DDoS + WAF</div>
+    </div>
+    <div class="card navy" style="text-align:center;padding:4mm">
+      <div style="font-size:18pt;margin-bottom:2mm">📊</div>
+      <div style="font-size:8.5pt;font-weight:700;color:white">Sentry + Umami</div>
+      <div style="font-size:7.5pt;color:rgba(180,210,255,.8)">Monitoramento + analytics LGPD</div>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <p><strong>Vantagem da stack escolhida:</strong> Next.js 15 com App Router permite renderização híbrida (SSG para páginas públicas, SSR para área de membros), garantindo <strong>máxima performance</strong> nas páginas indexadas pelo Google e <strong>segurança</strong> nas páginas protegidas. O Supabase oferece banco PostgreSQL managed com Row Level Security nativo, eliminando a necessidade de servidor dedicado.</p>
+  </div>
+
+  <div class="page-footer">
+    <div class="footer-logo">
+      <div class="footer-logo-box"><span>ILC</span></div>
+      <p>ILC Infraestrutura e Logística Conectada · Proposta Técnica 2026</p>
+    </div>
+    <p>Pág. 8</p>
+  </div>
+</div>
+
+
+<!-- ================================================
+     PÁGINA 9 – PLANO DE MIGRAÇÃO
+================================================ -->
+<div class="page inner-page">
+  <div class="page-header-bar">
+    <div class="brand"><div class="brand-dot"></div><span class="brand-name">ILC – Proposta Técnica</span></div>
+    <span class="pg">Seção 7</span>
+  </div>
+
+  <div class="section-label">Seção 07</div>
+  <h2 class="page-title">Plano de Migração</h2>
+  <p class="page-subtitle">5 fases de desenvolvimento com entregas e marcos definidos</p>
+  <div class="gold-bar"></div>
+
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-phase">Fase 1 · Semanas 1–3</div>
+      <div class="tl-title">Fundação & Setup</div>
+      <div class="tl-desc">Configuração do projeto Next.js + TypeScript, schema Drizzle + migrations PostgreSQL, sistema de autenticação Auth.js, componentes base (shadcn/ui + layout geral).</div>
+      <div class="tl-tags">
+        <span class="tag tag-navy">Next.js setup</span>
+        <span class="tag tag-navy">PostgreSQL migrations</span>
+        <span class="tag tag-navy">Auth.js roles</span>
+        <span class="tag tag-navy">Design system</span>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-phase">Fase 2 · Semanas 4–6</div>
+      <div class="tl-title">Conteúdo Público</div>
+      <div class="tl-desc">Implementação das páginas públicas: Home, Quem Somos, Serviços (4 páginas), Contato com envio de e-mail, Redes Sociais, Blog/Notícias. SEO completo (sitemap, meta tags, og:image).</div>
+      <div class="tl-tags">
+        <span class="tag tag-gold">Home · Serviços</span>
+        <span class="tag tag-gold">Blog</span>
+        <span class="tag tag-gold">Contato + e-mail</span>
+        <span class="tag tag-gold">SEO</span>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-phase">Fase 3 · Semanas 7–10</div>
+      <div class="tl-title">Área de Membros – Mastermind</div>
+      <div class="tl-desc">Área protegida com controle de acesso por role, listagem de trilhas e sessões, player/embed de vídeo, download protegido de PDFs (URLs temporárias de 5 minutos), middleware de autenticação.</div>
+      <div class="tl-tags">
+        <span class="tag tag-blue">Área protegida</span>
+        <span class="tag tag-blue">5 trilhas</span>
+        <span class="tag tag-blue">PDFs seguros</span>
+        <span class="tag tag-blue">Middleware</span>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-phase">Fase 4 · Semanas 11–14</div>
+      <div class="tl-title">Painel Administrativo</div>
+      <div class="tl-desc">Dashboard com métricas, CRUD completo de posts, serviços, sessões e PDFs, gestão de usuários/membros, caixa de mensagens de contato, editor de conteúdo rico (Tiptap), upload de imagens e arquivos.</div>
+      <div class="tl-tags">
+        <span class="tag tag-purple">Dashboard admin</span>
+        <span class="tag tag-purple">CRUD completo</span>
+        <span class="tag tag-purple">Editor Tiptap</span>
+        <span class="tag tag-purple">Gestão membros</span>
+      </div>
+    </div>
+
+    <div class="tl-item" style="padding-bottom:0">
+      <div class="tl-dot"></div>
+      <div class="tl-phase">Fase 5 · Semanas 15–16</div>
+      <div class="tl-title">Polimento, Testes & Go-Live</div>
+      <div class="tl-desc">Testes E2E com Playwright, revisão de performance (Lighthouse ≥ 90), migração de dados do WordPress (export XML), cutover de DNS, monitoramento pós-deploy.</div>
+      <div class="tl-tags">
+        <span class="tag tag-green">Playwright E2E</span>
+        <span class="tag tag-green">Lighthouse ≥ 90</span>
+        <span class="tag tag-green">Migração WP</span>
+        <span class="tag tag-green">DNS cutover</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <div class="footer-logo">
+      <div class="footer-logo-box"><span>ILC</span></div>
+      <p>ILC Infraestrutura e Logística Conectada · Proposta Técnica 2026</p>
+    </div>
+    <p>Pág. 9</p>
+  </div>
+</div>
+
+
+<!-- ================================================
+     PÁGINA 10 – PROTÓTIPOS
+================================================ -->
+<div class="page inner-page">
+  <div class="page-header-bar">
+    <div class="brand"><div class="brand-dot"></div><span class="brand-name">ILC – Proposta Técnica</span></div>
+    <span class="pg">Seção 8</span>
+  </div>
+
+  <div class="section-label">Seção 08</div>
+  <h2 class="page-title">Protótipos de Telas</h2>
+  <p class="page-subtitle">6 páginas desenvolvidas em HTML/Tailwind CSS — abrir localmente para visualização interativa</p>
+  <div class="gold-bar"></div>
+
+  <div class="grid3" style="margin-bottom:5mm">
+
+    <!-- Home -->
+    <div>
+      <div class="mockup-frame">
+        <div class="mockup-bar">
+          <div class="mockup-dot" style="background:#ff5f57"></div>
+          <div class="mockup-dot" style="background:#febc2e"></div>
+          <div class="mockup-dot" style="background:#28c840"></div>
+          <span style="color:rgba(255,255,255,.5);font-size:6pt;margin-left:4px">ilclog.com</span>
+        </div>
+        <div style="background:linear-gradient(135deg,#0B2545,#113a6b);padding:6mm;height:40mm;display:flex;flex-direction:column;justify-content:center">
+          <div style="width:30px;height:3px;background:#C8960C;margin-bottom:3mm"></div>
+          <div style="width:80%;height:6px;background:rgba(255,255,255,.8);border-radius:2px;margin-bottom:2mm"></div>
+          <div style="width:60%;height:4px;background:rgba(255,255,255,.3);border-radius:2px;margin-bottom:4mm"></div>
+          <div style="display:flex;gap:4px">
+            <div style="background:#C8960C;border-radius:4px;padding:3px 8px;font-size:6.5pt;color:white;font-weight:700">Serviços</div>
+            <div style="border:1px solid rgba(255,255,255,.4);border-radius:4px;padding:3px 8px;font-size:6.5pt;color:white">Mastermind</div>
+          </div>
+        </div>
+        <div style="padding:4mm;display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:3px">
+          <div style="background:#f1f5f9;border-radius:4px;height:16mm"></div>
+          <div style="background:#f1f5f9;border-radius:4px;height:16mm"></div>
+          <div style="background:#0B2545;border-radius:4px;height:16mm"></div>
+          <div style="background:#f1f5f9;border-radius:4px;height:16mm"></div>
+        </div>
+      </div>
+      <p style="font-size:8pt;font-weight:700;color:var(--navy);margin-top:2mm;text-align:center">index.html · Home</p>
+      <p style="font-size:7pt;color:var(--gray);text-align:center">Hero, serviços, Mastermind, notícias</p>
+    </div>
+
+    <!-- Quem Somos -->
+    <div>
+      <div class="mockup-frame">
+        <div class="mockup-bar">
+          <div class="mockup-dot" style="background:#ff5f57"></div>
+          <div class="mockup-dot" style="background:#febc2e"></div>
+          <div class="mockup-dot" style="background:#28c840"></div>
+          <span style="color:rgba(255,255,255,.5);font-size:6pt;margin-left:4px">ilclog.com/quem-somos</span>
+        </div>
+        <div style="background:linear-gradient(135deg,#0B2545,#113a6b);padding:6mm;height:14mm;display:flex;align-items:center">
+          <div style="width:60%;height:5px;background:rgba(255,255,255,.7);border-radius:2px"></div>
+        </div>
+        <div style="padding:4mm;display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:3px">
+          <div style="background:#f1f5f9;border-radius:4px;height:18mm"></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px">
+            <div style="background:#0B2545;border-radius:4px;height:8.5mm"></div>
+            <div style="background:#C8960C;border-radius:4px;height:8.5mm"></div>
+            <div style="background:#f1f5f9;border-radius:4px;height:8.5mm"></div>
+            <div style="background:#f1f5f9;border-radius:4px;height:8.5mm"></div>
+          </div>
+        </div>
+        <div style="padding:0 4mm 4mm;display:grid;grid-template-columns:1fr 1fr;gap:4px">
+          <div style="background:#f1f5f9;border-radius:4px;height:16mm"></div>
+          <div style="background:#f1f5f9;border-radius:4px;height:16mm"></div>
+        </div>
+      </div>
+      <p style="font-size:8pt;font-weight:700;color:var(--navy);margin-top:2mm;text-align:center">quem-somos.html</p>
+      <p style="font-size:7pt;color:var(--gray);text-align:center">Missão, valores, equipe</p>
+    </div>
+
+    <!-- Mastermind -->
+    <div>
+      <div class="mockup-frame">
+        <div class="mockup-bar">
+          <div class="mockup-dot" style="background:#ff5f57"></div>
+          <div class="mockup-dot" style="background:#febc2e"></div>
+          <div class="mockup-dot" style="background:#28c840"></div>
+          <span style="color:rgba(255,255,255,.5);font-size:6pt;margin-left:4px">ilclog.com/mastermind</span>
+        </div>
+        <div style="background:linear-gradient(135deg,#0B2545,#113a6b);padding:6mm;height:20mm">
+          <div style="width:40px;height:2px;background:#C8960C;margin-bottom:2mm"></div>
+          <div style="width:75%;height:5px;background:rgba(255,255,255,.8);border-radius:2px;margin-bottom:1.5mm"></div>
+          <div style="width:55%;height:3px;background:rgba(255,255,255,.3);border-radius:2px"></div>
+        </div>
+        <div style="padding:4mm;display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;gap:3px;margin-bottom:3px">
+          <div style="background:#f1f5f9;border-radius:4px;height:12mm"></div>
+          <div style="background:#f1f5f9;border-radius:4px;height:12mm"></div>
+          <div style="background:#f1f5f9;border-radius:4px;height:12mm"></div>
+          <div style="background:#0B2545;border-radius:4px;height:12mm"></div>
+          <div style="background:#f1f5f9;border-radius:4px;height:12mm"></div>
+        </div>
+        <div style="padding:0 4mm 4mm">
+          <div style="background:#f1f5f9;border-radius:4px;height:8mm;margin-bottom:2px"></div>
+          <div style="background:rgba(200,150,12,.1);border:1px dashed #C8960C;border-radius:4px;height:14mm;display:flex;align-items:center;justify-content:center">
+            <span style="font-size:6pt;color:#C8960C;font-weight:700">🔒 Conteúdo protegido</span>
+          </div>
+        </div>
+      </div>
+      <p style="font-size:8pt;font-weight:700;color:var(--navy);margin-top:2mm;text-align:center">mastermind.html</p>
+      <p style="font-size:7pt;color:var(--gray);text-align:center">Trilhas, sessões, acesso por login</p>
+    </div>
+
+  </div>
+
+  <div class="grid3">
+
+    <!-- Serviços -->
+    <div>
+      <div class="mockup-frame">
+        <div class="mockup-bar">
+          <div class="mockup-dot" style="background:#ff5f57"></div>
+          <div class="mockup-dot" style="background:#febc2e"></div>
+          <div class="mockup-dot" style="background:#28c840"></div>
+          <span style="color:rgba(255,255,255,.5);font-size:6pt;margin-left:4px">ilclog.com/servicos</span>
+        </div>
+        <div style="background:linear-gradient(135deg,#0B2545,#113a6b);height:12mm"></div>
+        <div style="padding:4mm;display:grid;grid-template-columns:1fr 1fr;gap:4px">
+          <div style="border:1px solid #e2e8f0;border-radius:4px;height:22mm;overflow:hidden">
+            <div style="background:#0B2545;height:8mm"></div>
+          </div>
+          <div style="border:1px solid #e2e8f0;border-radius:4px;height:22mm;overflow:hidden">
+            <div style="background:#C8960C;height:8mm"></div>
+          </div>
+          <div style="border:1px solid #e2e8f0;border-radius:4px;height:22mm;overflow:hidden">
+            <div style="background:#065f46;height:8mm"></div>
+          </div>
+          <div style="border:1px solid #e2e8f0;border-radius:4px;height:22mm;overflow:hidden">
+            <div style="background:#6b21a8;height:8mm"></div>
+          </div>
+        </div>
+      </div>
+      <p style="font-size:8pt;font-weight:700;color:var(--navy);margin-top:2mm;text-align:center">servicos.html</p>
+      <p style="font-size:7pt;color:var(--gray);text-align:center">4 serviços com features e CTA</p>
+    </div>
+
+    <!-- Contato -->
+    <div>
+      <div class="mockup-frame">
+        <div class="mockup-bar">
+          <div class="mockup-dot" style="background:#ff5f57"></div>
+          <div class="mockup-dot" style="background:#febc2e"></div>
+          <div class="mockup-dot" style="background:#28c840"></div>
+          <span style="color:rgba(255,255,255,.5);font-size:6pt;margin-left:4px">ilclog.com/contato</span>
+        </div>
+        <div style="background:linear-gradient(135deg,#0B2545,#113a6b);height:12mm"></div>
+        <div style="padding:4mm;display:grid;grid-template-columns:3fr 2fr;gap:4px">
+          <div style="border:1px solid #e2e8f0;border-radius:6px;padding:4px">
+            <div style="background:#f1f5f9;border-radius:3px;height:5px;margin-bottom:3px"></div>
+            <div style="background:#f1f5f9;border-radius:3px;height:5px;margin-bottom:3px;width:70%"></div>
+            <div style="background:#f1f5f9;border-radius:3px;height:14px;margin-bottom:3px"></div>
+            <div style="background:#0B2545;border-radius:4px;height:7px;width:60%;margin-top:5px"></div>
+          </div>
+          <div>
+            <div style="background:#f1f5f9;border-radius:4px;height:9mm;margin-bottom:3px"></div>
+            <div style="background:#f1f5f9;border-radius:4px;height:9mm;margin-bottom:3px"></div>
+            <div style="background:#0B2545;border-radius:4px;height:9mm"></div>
+          </div>
+        </div>
+      </div>
+      <p style="font-size:8pt;font-weight:700;color:var(--navy);margin-top:2mm;text-align:center">contato.html</p>
+      <p style="font-size:7pt;color:var(--gray);text-align:center">Formulário validado + equipe</p>
+    </div>
+
+    <!-- Login -->
+    <div>
+      <div class="mockup-frame">
+        <div class="mockup-bar">
+          <div class="mockup-dot" style="background:#ff5f57"></div>
+          <div class="mockup-dot" style="background:#febc2e"></div>
+          <div class="mockup-dot" style="background:#28c840"></div>
+          <span style="color:rgba(255,255,255,.5);font-size:6pt;margin-left:4px">ilclog.com/login</span>
+        </div>
+        <div style="background:linear-gradient(135deg,#0B2545,#113a6b);padding:10mm;display:flex;align-items:center;justify-content:center;height:56mm">
+          <div style="background:white;border-radius:8px;padding:6mm;width:100%">
+            <div style="width:30px;height:30px;background:#0B2545;border-radius:6px;margin:0 auto 3mm;display:flex;align-items:center;justify-content:center">
+              <span style="color:#C8960C;font-size:7pt;font-weight:800">ILC</span>
+            </div>
+            <div style="background:#f1f5f9;border-radius:3px;height:6px;margin-bottom:3px"></div>
+            <div style="background:#f1f5f9;border-radius:3px;height:6px;margin-bottom:5px"></div>
+            <div style="background:#0B2545;border-radius:4px;height:7px"></div>
+          </div>
+        </div>
+      </div>
+      <p style="font-size:8pt;font-weight:700;color:var(--navy);margin-top:2mm;text-align:center">login.html</p>
+      <p style="font-size:7pt;color:var(--gray);text-align:center">Autenticação da área de membros</p>
+    </div>
+
+  </div>
+
+  <div class="page-footer">
+    <div class="footer-logo">
+      <div class="footer-logo-box"><span>ILC</span></div>
+      <p>ILC Infraestrutura e Logística Conectada · Proposta Técnica 2026</p>
+    </div>
+    <p>Pág. 10</p>
+  </div>
+</div>
+
+
+<!-- ================================================
+     PÁGINA 11 – PRÓXIMOS PASSOS
+================================================ -->
+<div class="page inner-page">
+  <div class="page-header-bar">
+    <div class="brand"><div class="brand-dot"></div><span class="brand-name">ILC – Proposta Técnica</span></div>
+    <span class="pg">Seção 9</span>
+  </div>
+
+  <div class="section-label">Seção 09</div>
+  <h2 class="page-title">Próximos Passos</h2>
+  <p class="page-subtitle">Ações imediatas necessárias para iniciar o projeto de reconstrução</p>
+  <div class="gold-bar"></div>
+
+  <div class="grid2" style="margin-bottom:6mm">
+    <div>
+      <h3 class="block-title gold">✦ Ações Imediatas do Cliente</h3>
+      <ul class="check-list">
+        <li><span class="check-icon" style="color:var(--gold)">1.</span><div><strong style="font-size:8.5pt">Validar regras de negócio</strong><br/><span style="color:var(--gray)">Confirmar ou corrigir as regras levantadas neste documento antes de iniciar o desenvolvimento.</span></div></li>
+        <li><span class="check-icon" style="color:var(--gold)">2.</span><div><strong style="font-size:8.5pt">Definir identidade visual</strong><br/><span style="color:var(--gray)">Confirmar se o design dos protótipos será adotado ou se há necessidade de revisão de cores, fontes e logo.</span></div></li>
+        <li><span class="check-icon" style="color:var(--gold)">3.</span><div><strong style="font-size:8.5pt">Exportar conteúdo do WordPress</strong><br/><span style="color:var(--gray)">Realizar export XML do WordPress atual (Ferramentas → Exportar) para preservar posts, páginas e metadados antes da migração.</span></div></li>
+        <li><span class="check-icon" style="color:var(--gold)">4.</span><div><strong style="font-size:8.5pt">Listar todas as sessões do Mastermind</strong><br/><span style="color:var(--gray)">Catalogar as 120+ sessões com títulos, datas, palestrantes e PDFs para estruturar a migração de conteúdo.</span></div></li>
+        <li><span class="check-icon" style="color:var(--gold)">5.</span><div><strong style="font-size:8.5pt">Confirmar domínio e hosting</strong><br/><span style="color:var(--gray)">Acesso às credenciais de DNS do domínio ilclog.com para realizar o cutover após o deploy.</span></div></li>
+      </ul>
+    </div>
+    <div>
+      <h3 class="block-title">Ações da Equipe de Desenvolvimento</h3>
+      <ul class="check-list">
+        <li><span class="check-icon">→</span><div><strong style="font-size:8.5pt">Fase 1 – Setup do projeto</strong><br/><span style="color:var(--gray)">Repositório GitHub, ambiente Vercel, banco Supabase, schema de migrations.</span></div></li>
+        <li><span class="check-icon">→</span><div><strong style="font-size:8.5pt">Componentes base</strong><br/><span style="color:var(--gray)">Design system em Tailwind + shadcn/ui baseado nos protótipos aprovados.</span></div></li>
+        <li><span class="check-icon">→</span><div><strong style="font-size:8.5pt">Autenticação e roles</strong><br/><span style="color:var(--gray)">Auth.js com suporte a admin, editor e member. Middleware de proteção de rotas.</span></div></li>
+        <li><span class="check-icon">→</span><div><strong style="font-size:8.5pt">Painel admin mínimo</strong><br/><span style="color:var(--gray)">CRUD de posts e sessões para viabilizar migração de conteúdo do WordPress.</span></div></li>
+        <li><span class="check-icon">→</span><div><strong style="font-size:8.5pt">Script de migração WP</strong><br/><span style="color:var(--gray)">Parser do XML de export do WordPress para popular o banco de dados PostgreSQL.</span></div></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Sumário final -->
+  <div style="background:var(--navy);border-radius:12px;padding:6mm 7mm;display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:4mm">
+    <div style="text-align:center;border-right:1px solid rgba(255,255,255,.1);padding-right:4mm">
+      <div style="font-size:8pt;color:rgba(180,210,255,.6);margin-bottom:1mm">Páginas no protótipo</div>
+      <div style="font-size:24pt;font-weight:800;color:white">6</div>
+    </div>
+    <div style="text-align:center;border-right:1px solid rgba(255,255,255,.1);padding-right:4mm">
+      <div style="font-size:8pt;color:rgba(180,210,255,.6);margin-bottom:1mm">Tabelas no banco</div>
+      <div style="font-size:24pt;font-weight:800;color:var(--gold)">12</div>
+    </div>
+    <div style="text-align:center;border-right:1px solid rgba(255,255,255,.1);padding-right:4mm">
+      <div style="font-size:8pt;color:rgba(180,210,255,.6);margin-bottom:1mm">Fases de entrega</div>
+      <div style="font-size:24pt;font-weight:800;color:white">5</div>
+    </div>
+    <div style="text-align:center">
+      <div style="font-size:8pt;color:rgba(180,210,255,.6);margin-bottom:1mm">Semanas estimadas</div>
+      <div style="font-size:24pt;font-weight:800;color:white">16</div>
+    </div>
+  </div>
+
+  <div style="margin-top:6mm;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:10px;padding:5mm 7mm;display:flex;align-items:center;justify-content:space-between">
+    <div>
+      <p style="font-size:9pt;font-weight:700;color:white">Pronto para iniciar?</p>
+      <p style="font-size:8pt;color:rgba(255,255,255,.85)">Entre em contato para alinhar escopo, cronograma e kick-off do projeto.</p>
+    </div>
+    <div style="text-align:right">
+      <p style="font-size:8pt;color:white;font-weight:600">gerencia.comercial@ilclog.com</p>
+      <p style="font-size:8pt;color:rgba(255,255,255,.85)">(61) 99942-1123</p>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <div class="footer-logo">
+      <div class="footer-logo-box"><span>ILC</span></div>
+      <p>ILC Infraestrutura e Logística Conectada · Proposta Técnica 2026</p>
+    </div>
+    <p>Pág. 11</p>
+  </div>
+</div>
+
+</body>
+</html>

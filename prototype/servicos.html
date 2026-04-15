@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Serviços – ILC Infraestrutura e Logística Conectada</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: { 900: '#0B2545', 800: '#0d2e57', 700: '#113a6b', 600: '#1a4f8a' },
+            gold:  { 500: '#C8960C', 400: '#dba81a', 300: '#e8c44a' },
+          },
+          fontFamily: { sans: ['Inter','sans-serif'], serif: ['Playfair Display','serif'] }
+        }
+      }
+    }
+  </script>
+  <style>
+    html { scroll-behavior: smooth; }
+    .gold-line { width: 60px; height: 3px; background: #C8960C; }
+    .nav-link::after { content:''; position:absolute; bottom:-2px; left:0; width:0; height:2px; background:#C8960C; transition:width .3s; }
+    .nav-link { position: relative; }
+    .nav-link:hover::after { width:100%; }
+    .service-tab { transition: all .2s; }
+    .service-tab.active { background:#0B2545; color:white; }
+    .service-tab.active .tab-dot { background:#C8960C; }
+  </style>
+</head>
+<body class="font-sans bg-white text-gray-800">
+
+  <!-- NAVBAR -->
+  <header class="fixed top-0 left-0 right-0 z-50 bg-navy-900/95 backdrop-blur-sm shadow-lg">
+    <div class="max-w-7xl mx-auto px-6 flex items-center justify-between h-18 py-4">
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-gold-500 rounded-lg flex items-center justify-center">
+          <span class="text-white font-serif font-bold text-lg">ILC</span>
+        </div>
+        <div class="hidden sm:block">
+          <p class="text-white font-semibold text-sm leading-tight">Infraestrutura e</p>
+          <p class="text-gold-400 font-semibold text-sm leading-tight">Logística Conectada</p>
+        </div>
+      </a>
+      <nav class="hidden md:flex items-center gap-8">
+        <a href="index.html"       class="nav-link text-white text-sm font-medium">Home</a>
+        <a href="mastermind.html"  class="nav-link text-gold-400 text-sm font-semibold tracking-wide uppercase">Mastermind</a>
+        <a href="servicos.html"    class="nav-link text-gold-400 text-sm font-medium">Serviços</a>
+        <a href="quem-somos.html"  class="nav-link text-white text-sm font-medium">Quem Somos</a>
+        <a href="contato.html"     class="nav-link text-white text-sm font-medium">Contato</a>
+      </nav>
+      <a href="login.html" class="hidden md:block bg-gold-500 hover:bg-gold-400 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors">
+        Área do Membro
+      </a>
+    </div>
+  </header>
+
+  <!-- PAGE HERO -->
+  <section class="pt-32 pb-16 bg-gradient-to-br from-navy-900 to-navy-700">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="flex items-center gap-2 text-blue-300 text-sm mb-4">
+        <a href="index.html" class="hover:text-gold-400 transition-colors">Home</a>
+        <span>/</span>
+        <span class="text-gold-400">Serviços</span>
+      </div>
+      <h1 class="font-serif text-5xl font-bold text-white mb-4">Nossos Serviços</h1>
+      <p class="text-blue-200 text-xl max-w-2xl">Soluções integradas e personalizadas para organizações que buscam excelência em infraestrutura e logística.</p>
+    </div>
+  </section>
+
+  <!-- SERVIÇOS GRID -->
+  <section class="py-20 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="grid md:grid-cols-2 gap-8">
+
+        <!-- Serviço 1 -->
+        <div id="gestao" class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden group hover:shadow-lg transition-shadow">
+          <div class="bg-navy-900 p-8 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+            <div class="w-16 h-16 bg-gold-500/20 rounded-2xl flex items-center justify-center mb-5">
+              <svg class="w-8 h-8 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+            </div>
+            <h2 class="font-serif text-2xl font-bold text-white mb-2">Gestão de Projetos Estratégicos</h2>
+            <p class="text-blue-300 text-sm">Execução orientada a resultados</p>
+          </div>
+          <div class="p-8">
+            <p class="text-gray-600 leading-relaxed mb-6">
+              Nossa gestão de projetos estratégicos é essencial para garantir o sucesso e a sustentabilidade das organizações em ambientes competitivos. Alinhamos os objetivos do cliente com soluções de infraestrutura e logística.
+            </p>
+            <div class="space-y-3 mb-7">
+              <div class="flex items-start gap-3">
+                <div class="w-5 h-5 bg-gold-500/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <svg class="w-3 h-3 text-gold-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                </div>
+                <p class="text-gray-600 text-sm">Análise de necessidades e objetivos do cliente</p>
+              </div>
+              <div class="flex items-start gap-3">
+                <div class="w-5 h-5 bg-gold-500/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <svg class="w-3 h-3 text-gold-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                </div>
+                <p class="text-gray-600 text-sm">Planos customizados de transporte e infraestrutura</p>
+              </div>
+              <div class="flex items-start gap-3">
+                <div class="w-5 h-5 bg-gold-500/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <svg class="w-3 h-3 text-gold-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                </div>
+                <p class="text-gray-600 text-sm">Controle rigoroso de prazos, custos e qualidade</p>
+              </div>
+              <div class="flex items-start gap-3">
+                <div class="w-5 h-5 bg-gold-500/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <svg class="w-3 h-3 text-gold-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                </div>
+                <p class="text-gray-600 text-sm">Inovação contínua em tecnologias de gestão</p>
+              </div>
+            </div>
+            <a href="contato.html" class="inline-flex items-center gap-2 bg-navy-900 text-white text-sm font-semibold px-6 py-3 rounded-lg hover:bg-navy-800 transition-colors">
+              Solicitar este serviço
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Serviço 2 -->
+        <div id="consultoria" class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden group hover:shadow-lg transition-shadow">
+          <div class="bg-gradient-to-br from-gold-500 to-yellow-600 p-8 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+            <div class="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mb-5">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            </div>
+            <h2 class="font-serif text-2xl font-bold text-white mb-2">Consultoria Personalizada</h2>
+            <p class="text-yellow-100 text-sm">Soluções sob medida para sua operação</p>
+          </div>
+          <div class="p-8">
+            <p class="text-gray-600 leading-relaxed mb-6">
+              A consultoria personalizada emerge como diferencial essencial para empresas que buscam otimizar suas operações de infraestrutura e logística. Cada organização possui necessidades únicas e desafios específicos.
+            </p>
+            <div class="space-y-3 mb-7">
+              <div class="flex items-start gap-3">
+                <div class="w-5 h-5 bg-gold-500/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <svg class="w-3 h-3 text-gold-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                </div>
+                <p class="text-gray-600 text-sm">Abordagem holística e multi-área operacional</p>
+              </div>
+              <div class="flex items-start gap-3">
+                <div class="w-5 h-5 bg-gold-500/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <svg class="w-3 h-3 text-gold-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                </div>
+                <p class="text-gray-600 text-sm">Identificação de gargalos e pontos de melhoria</p>
+              </div>
+              <div class="flex items-start gap-3">
+                <div class="w-5 h-5 bg-gold-500/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <svg class="w-3 h-3 text-gold-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                </div>
+                <p class="text-gray-600 text-sm">Estratégias customizadas para redução de custos</p>
+              </div>
+              <div class="flex items-start gap-3">
+                <div class="w-5 h-5 bg-gold-500/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <svg class="w-3 h-3 text-gold-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                </div>
+                <p class="text-gray-600 text-sm">Atende qualquer porte e complexidade operacional</p>
+              </div>
+            </div>
+            <a href="contato.html" class="inline-flex items-center gap-2 bg-gold-500 text-white text-sm font-semibold px-6 py-3 rounded-lg hover:bg-gold-400 transition-colors">
+              Solicitar este serviço
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Serviço 3 -->
+        <div id="treinamento" class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden group hover:shadow-lg transition-shadow">
+          <div class="bg-gradient-to-br from-emerald-700 to-emerald-900 p-8 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+            <div class="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mb-5">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+            </div>
+            <h2 class="font-serif text-2xl font-bold text-white mb-2">Treinamento e Palestras Técnicas</h2>
+            <p class="text-emerald-200 text-sm">Conhecimento aplicado ao mercado</p>
+          </div>
+          <div class="p-8">
+            <p class="text-gray-600 leading-relaxed mb-6">
+              O conhecimento é fundamental para o sucesso em infraestrutura e logística. Nossos programas de treinamento e palestras técnicas são desenvolvidos por especialistas com larga experiência prática no setor.
+            </p>
+            <div class="space-y-3 mb-7">
+              <div class="flex items-start gap-3">
+                <div class="w-5 h-5 bg-gold-500/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <svg class="w-3 h-3 text-gold-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                </div>
+                <p class="text-gray-600 text-sm">Conteúdo técnico especializado e atualizado</p>
+              </div>
+              <div class="flex items-start gap-3">
+                <div class="w-5 h-5 bg-gold-500/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <svg class="w-3 h-3 text-gold-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                </div>
+                <p class="text-gray-600 text-sm">Palestrantes com décadas de experiência prática</p>
+              </div>
+              <div class="flex items-start gap-3">
+                <div class="w-5 h-5 bg-gold-500/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <svg class="w-3 h-3 text-gold-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                </div>
+                <p class="text-gray-600 text-sm">Formato presencial e online disponíveis</p>
+              </div>
+              <div class="flex items-start gap-3">
+                <div class="w-5 h-5 bg-gold-500/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <svg class="w-3 h-3 text-gold-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                </div>
+                <p class="text-gray-600 text-sm">Certificação de participação</p>
+              </div>
+            </div>
+            <a href="contato.html" class="inline-flex items-center gap-2 bg-emerald-700 text-white text-sm font-semibold px-6 py-3 rounded-lg hover:bg-emerald-600 transition-colors">
+              Solicitar este serviço
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Serviço 4 -->
+        <div id="defesa" class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden group hover:shadow-lg transition-shadow">
+          <div class="bg-gradient-to-br from-purple-700 to-purple-900 p-8 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+            <div class="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mb-5">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/></svg>
+            </div>
+            <h2 class="font-serif text-2xl font-bold text-white mb-2">Defesa de Pautas e Projetos Estratégicos</h2>
+            <p class="text-purple-200 text-sm">Advocacia e representação de interesses</p>
+          </div>
+          <div class="p-8">
+            <p class="text-gray-600 leading-relaxed mb-6">
+              A defesa de pautas e projetos estratégicos torna-se imperativa no setor de infraestrutura e logística. Atuamos na representação de interesses junto a órgãos públicos e privados para impulsionar o desenvolvimento econômico e social.
+            </p>
+            <div class="space-y-3 mb-7">
+              <div class="flex items-start gap-3">
+                <div class="w-5 h-5 bg-gold-500/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <svg class="w-3 h-3 text-gold-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                </div>
+                <p class="text-gray-600 text-sm">Atuação junto a órgãos reguladores (ANTAQ, ANTT, etc.)</p>
+              </div>
+              <div class="flex items-start gap-3">
+                <div class="w-5 h-5 bg-gold-500/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <svg class="w-3 h-3 text-gold-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                </div>
+                <p class="text-gray-600 text-sm">Elaboração de estudos e posicionamentos técnicos</p>
+              </div>
+              <div class="flex items-start gap-3">
+                <div class="w-5 h-5 bg-gold-500/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <svg class="w-3 h-3 text-gold-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                </div>
+                <p class="text-gray-600 text-sm">Representação em audiências e consultas públicas</p>
+              </div>
+              <div class="flex items-start gap-3">
+                <div class="w-5 h-5 bg-gold-500/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <svg class="w-3 h-3 text-gold-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                </div>
+                <p class="text-gray-600 text-sm">Suporte à defesa de PPPs e concessões</p>
+              </div>
+            </div>
+            <a href="contato.html" class="inline-flex items-center gap-2 bg-purple-700 text-white text-sm font-semibold px-6 py-3 rounded-lg hover:bg-purple-600 transition-colors">
+              Solicitar este serviço
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA FINAL -->
+  <section class="py-20 bg-navy-900 text-center relative overflow-hidden">
+    <div class="absolute inset-0 opacity-5" style="background:radial-gradient(circle at 50% 50%, #C8960C 0%, transparent 70%)"></div>
+    <div class="max-w-3xl mx-auto px-6 relative z-10">
+      <div class="gold-line mx-auto mb-6"></div>
+      <h2 class="font-serif text-4xl font-bold text-white mb-4">
+        Pronto para levar seus projetos ao próximo nível?
+      </h2>
+      <p class="text-blue-300 text-lg mb-8">Entre em contato e descubra como a ILC pode transformar sua operação logística e de infraestrutura.</p>
+      <a href="contato.html" class="inline-block bg-gold-500 hover:bg-gold-400 text-white font-semibold px-10 py-4 rounded-xl transition-all hover:shadow-lg text-lg">
+        Falar com a ILC
+      </a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-navy-900 border-t border-white/5 text-white pt-16 pb-8">
+    <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-4 gap-10 mb-12">
+      <div class="md:col-span-2">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-10 h-10 bg-gold-500 rounded-lg flex items-center justify-center">
+            <span class="text-white font-serif font-bold text-lg">ILC</span>
+          </div>
+          <div>
+            <p class="text-white font-semibold text-sm">Infraestrutura e</p>
+            <p class="text-gold-400 font-semibold text-sm">Logística Conectada</p>
+          </div>
+        </div>
+        <p class="text-blue-300 text-sm leading-relaxed max-w-sm">O mais novo centro de inteligência e inovação em infraestrutura e logística do Brasil.</p>
+      </div>
+      <div>
+        <h4 class="font-semibold text-white mb-4 text-sm uppercase tracking-wider">Links</h4>
+        <ul class="space-y-2">
+          <li><a href="index.html"       class="text-blue-300 hover:text-gold-400 text-sm transition-colors">Home</a></li>
+          <li><a href="mastermind.html"  class="text-blue-300 hover:text-gold-400 text-sm transition-colors">Mastermind</a></li>
+          <li><a href="servicos.html"    class="text-blue-300 hover:text-gold-400 text-sm transition-colors">Serviços</a></li>
+          <li><a href="quem-somos.html"  class="text-blue-300 hover:text-gold-400 text-sm transition-colors">Quem Somos</a></li>
+          <li><a href="contato.html"     class="text-blue-300 hover:text-gold-400 text-sm transition-colors">Contato</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-semibold text-white mb-4 text-sm uppercase tracking-wider">Contato</h4>
+        <ul class="space-y-2 text-sm text-blue-300">
+          <li>(61) 99942-1123</li>
+          <li>(61) 98111-9889</li>
+          <li>(61) 99325-9222</li>
+          <li class="pt-1 text-blue-400 text-xs">gerencia.comercial@ilclog.com</li>
+        </ul>
+      </div>
+    </div>
+    <div class="max-w-7xl mx-auto px-6 pt-6 border-t border-white/10">
+      <p class="text-blue-400 text-xs">© 2026 ILC INFRA E LOGÍSTICA · Todos os direitos reservados</p>
+    </div>
+  </footer>
+
+</body>
+</html>

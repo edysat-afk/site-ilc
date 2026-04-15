@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ILC – Infraestrutura e Logística Conectada</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: { 900: '#0B2545', 800: '#0d2e57', 700: '#113a6b', 600: '#1a4f8a' },
+            gold:  { 500: '#C8960C', 400: '#dba81a', 300: '#e8c44a' },
+          },
+          fontFamily: { sans: ['Inter','sans-serif'], serif: ['Playfair Display','serif'] }
+        }
+      }
+    }
+  </script>
+  <style>
+    html { scroll-behavior: smooth; }
+    .hero-bg { background: linear-gradient(135deg, #0B2545 0%, #113a6b 50%, #0d2e57 100%); }
+    .gold-line { width: 60px; height: 3px; background: #C8960C; }
+    .card-hover { transition: transform .25s ease, box-shadow .25s ease; }
+    .card-hover:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(11,37,69,.15); }
+    .nav-link { position: relative; }
+    .nav-link::after { content:''; position:absolute; bottom:-2px; left:0; width:0; height:2px; background:#C8960C; transition:width .3s; }
+    .nav-link:hover::after { width:100%; }
+  </style>
+</head>
+<body class="font-sans bg-white text-gray-800">
+
+  <!-- ========== NAVBAR ========== -->
+  <header class="fixed top-0 left-0 right-0 z-50 bg-navy-900/95 backdrop-blur-sm shadow-lg">
+    <div class="max-w-7xl mx-auto px-6 flex items-center justify-between h-18 py-4">
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-gold-500 rounded-lg flex items-center justify-center">
+          <span class="text-white font-serif font-bold text-lg">ILC</span>
+        </div>
+        <div class="hidden sm:block">
+          <p class="text-white font-semibold text-sm leading-tight">Infraestrutura e</p>
+          <p class="text-gold-400 font-semibold text-sm leading-tight">Logística Conectada</p>
+        </div>
+      </a>
+      <nav class="hidden md:flex items-center gap-8">
+        <a href="index.html"        class="nav-link text-white text-sm font-medium">Home</a>
+        <a href="mastermind.html"   class="nav-link text-gold-400 text-sm font-semibold tracking-wide uppercase">Mastermind</a>
+        <div class="relative group">
+          <a href="servicos.html"   class="nav-link text-white text-sm font-medium flex items-center gap-1">
+            Serviços
+            <svg class="w-3 h-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </a>
+          <div class="absolute top-full left-0 mt-2 w-64 bg-white shadow-xl rounded-xl overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto">
+            <a href="servicos.html" class="block px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 hover:text-navy-900 border-b border-gray-100">Gestão de Projetos Estratégicos</a>
+            <a href="servicos.html" class="block px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 hover:text-navy-900 border-b border-gray-100">Consultoria Personalizada</a>
+            <a href="servicos.html" class="block px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 hover:text-navy-900 border-b border-gray-100">Treinamento e Palestras</a>
+            <a href="servicos.html" class="block px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 hover:text-navy-900">Defesa de Pautas Estratégicas</a>
+          </div>
+        </div>
+        <a href="quem-somos.html"   class="nav-link text-white text-sm font-medium">Quem Somos</a>
+        <a href="contato.html"      class="nav-link text-white text-sm font-medium">Contato</a>
+      </nav>
+      <a href="login.html" class="hidden md:block bg-gold-500 hover:bg-gold-400 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors">
+        Área do Membro
+      </a>
+    </div>
+  </header>
+
+  <!-- ========== HERO ========== -->
+  <section class="hero-bg min-h-screen flex items-center pt-18 relative overflow-hidden">
+    <!-- Decorative circles -->
+    <div class="absolute top-20 right-0 w-96 h-96 bg-blue-600/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+    <div class="absolute bottom-0 left-20 w-64 h-64 bg-gold-500/10 rounded-full translate-y-1/3"></div>
+    <div class="absolute top-1/3 left-1/2 w-1 h-32 bg-gold-500/30 rotate-45"></div>
+
+    <div class="max-w-7xl mx-auto px-6 py-24 grid md:grid-cols-2 gap-12 items-center">
+      <div>
+        <div class="inline-flex items-center gap-2 bg-gold-500/20 text-gold-400 text-xs font-semibold px-4 py-2 rounded-full mb-6 uppercase tracking-wider">
+          <span class="w-2 h-2 bg-gold-400 rounded-full"></span>
+          Centro de Inteligência em Infraestrutura
+        </div>
+        <h1 class="font-serif text-5xl md:text-6xl text-white font-bold leading-tight mb-6">
+          Conectando <span class="text-gold-400">soluções</span> à infraestrutura do Brasil
+        </h1>
+        <p class="text-blue-200 text-lg leading-relaxed mb-8 max-w-xl">
+          A ILC é o mais novo centro de inteligência e inovação em infraestrutura e logística, desenvolvendo e transmitindo conhecimento nos modais hidroviário, ferroviário e rodoviário.
+        </p>
+        <div class="flex flex-wrap gap-4">
+          <a href="servicos.html" class="bg-gold-500 hover:bg-gold-400 text-white font-semibold px-8 py-3.5 rounded-lg transition-all hover:shadow-lg hover:shadow-gold-500/30">
+            Nossos Serviços
+          </a>
+          <a href="mastermind.html" class="border border-white/30 hover:border-gold-400 text-white hover:text-gold-400 font-semibold px-8 py-3.5 rounded-lg transition-all">
+            Conhecer o Mastermind
+          </a>
+        </div>
+
+        <!-- Stats -->
+        <div class="mt-12 grid grid-cols-3 gap-6 pt-8 border-t border-white/10">
+          <div>
+            <p class="text-3xl font-bold text-white">120<span class="text-gold-400">+</span></p>
+            <p class="text-blue-300 text-sm mt-1">Sessões realizadas</p>
+          </div>
+          <div>
+            <p class="text-3xl font-bold text-white">5<span class="text-gold-400">+</span></p>
+            <p class="text-blue-300 text-sm mt-1">Anos de Mastermind</p>
+          </div>
+          <div>
+            <p class="text-3xl font-bold text-white">4</p>
+            <p class="text-blue-300 text-sm mt-1">Serviços especializados</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hero visual -->
+      <div class="hidden md:flex justify-center items-center">
+        <div class="relative">
+          <!-- Main card -->
+          <div class="bg-white/10 backdrop-blur border border-white/20 rounded-2xl p-8 w-80">
+            <div class="flex items-center gap-3 mb-6">
+              <div class="w-12 h-12 bg-gold-500/20 rounded-xl flex items-center justify-center">
+                <svg class="w-6 h-6 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
+              </div>
+              <div>
+                <p class="text-white font-semibold text-sm">Mastermind Infra 2026</p>
+                <p class="text-blue-300 text-xs">Próxima sessão disponível</p>
+              </div>
+            </div>
+            <div class="space-y-3">
+              <div class="flex items-center gap-3 bg-white/5 rounded-lg px-3 py-2">
+                <div class="w-2 h-2 bg-green-400 rounded-full"></div>
+                <p class="text-white/80 text-xs">Ferrovias e multimodalidade</p>
+              </div>
+              <div class="flex items-center gap-3 bg-white/5 rounded-lg px-3 py-2">
+                <div class="w-2 h-2 bg-gold-400 rounded-full"></div>
+                <p class="text-white/80 text-xs">Portos e logística de exportação</p>
+              </div>
+              <div class="flex items-center gap-3 bg-white/5 rounded-lg px-3 py-2">
+                <div class="w-2 h-2 bg-blue-400 rounded-full"></div>
+                <p class="text-white/80 text-xs">Rodovias federais e PPPs</p>
+              </div>
+            </div>
+            <a href="mastermind.html" class="mt-5 block text-center bg-gold-500 text-white text-sm font-semibold py-2.5 rounded-lg hover:bg-gold-400 transition-colors">
+              Acessar Conteúdo
+            </a>
+          </div>
+          <!-- Floating badge -->
+          <div class="absolute -top-4 -right-4 bg-green-500 text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-lg">
+            ✓ Brasília · DF
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== SERVIÇOS ========== -->
+  <section class="py-24 bg-white">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="text-center mb-16">
+        <div class="gold-line mx-auto mb-4"></div>
+        <h2 class="font-serif text-4xl font-bold text-navy-900 mb-4">Nossos Serviços</h2>
+        <p class="text-gray-500 max-w-2xl mx-auto text-lg">
+          Soluções integradas para empresas que buscam excelência em infraestrutura e logística.
+        </p>
+      </div>
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+        <!-- Card 1 -->
+        <div class="card-hover bg-white border border-gray-100 rounded-2xl p-7 shadow-sm group">
+          <div class="w-14 h-14 bg-navy-900/5 group-hover:bg-navy-900 rounded-xl flex items-center justify-center mb-5 transition-colors">
+            <svg class="w-7 h-7 text-navy-900 group-hover:text-gold-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+          </div>
+          <h3 class="font-semibold text-navy-900 text-lg mb-2">Gestão de Projetos Estratégicos</h3>
+          <p class="text-gray-500 text-sm leading-relaxed mb-4">Execução orientada a resultados com controle de prazos, custos e qualidade.</p>
+          <a href="servicos.html" class="text-gold-500 text-sm font-semibold hover:underline">Saiba mais →</a>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="card-hover bg-white border border-gray-100 rounded-2xl p-7 shadow-sm group">
+          <div class="w-14 h-14 bg-navy-900/5 group-hover:bg-navy-900 rounded-xl flex items-center justify-center mb-5 transition-colors">
+            <svg class="w-7 h-7 text-navy-900 group-hover:text-gold-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          </div>
+          <h3 class="font-semibold text-navy-900 text-lg mb-2">Consultoria Personalizada</h3>
+          <p class="text-gray-500 text-sm leading-relaxed mb-4">Diagnóstico e soluções customizadas para otimizar suas operações logísticas.</p>
+          <a href="servicos.html" class="text-gold-500 text-sm font-semibold hover:underline">Saiba mais →</a>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="card-hover bg-navy-900 rounded-2xl p-7 shadow-sm group">
+          <div class="w-14 h-14 bg-gold-500/20 rounded-xl flex items-center justify-center mb-5">
+            <svg class="w-7 h-7 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/></svg>
+          </div>
+          <h3 class="font-semibold text-white text-lg mb-2">Defesa de Pautas Estratégicas</h3>
+          <p class="text-blue-300 text-sm leading-relaxed mb-4">Advocacia e representação de interesses para iniciativas de infraestrutura.</p>
+          <a href="servicos.html" class="text-gold-400 text-sm font-semibold hover:underline">Saiba mais →</a>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="card-hover bg-white border border-gray-100 rounded-2xl p-7 shadow-sm group">
+          <div class="w-14 h-14 bg-navy-900/5 group-hover:bg-navy-900 rounded-xl flex items-center justify-center mb-5 transition-colors">
+            <svg class="w-7 h-7 text-navy-900 group-hover:text-gold-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+          </div>
+          <h3 class="font-semibold text-navy-900 text-lg mb-2">Treinamento e Palestras Técnicas</h3>
+          <p class="text-gray-500 text-sm leading-relaxed mb-4">Capacitação de profissionais com conteúdo técnico especializado em logística.</p>
+          <a href="servicos.html" class="text-gold-500 text-sm font-semibold hover:underline">Saiba mais →</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== MASTERMIND BANNER ========== -->
+  <section class="py-20 bg-gradient-to-r from-navy-900 to-navy-700 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-5" style="background-image:url('data:image/svg+xml,<svg width=\'60\' height=\'60\' xmlns=\'http://www.w3.org/2000/svg\'><path d=\'M30 0L60 30L30 60L0 30Z\' fill=\'white\' fill-opacity=\'0.3\'/></svg>')"></div>
+    <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center relative z-10">
+      <div>
+        <div class="inline-flex items-center gap-2 bg-gold-500/20 text-gold-400 text-xs font-bold px-4 py-2 rounded-full mb-6 uppercase tracking-widest">
+          ★ Programa Exclusivo
+        </div>
+        <h2 class="font-serif text-4xl md:text-5xl text-white font-bold mb-5">
+          Mastermind<br/><span class="text-gold-400">Infraestrutura</span>
+        </h2>
+        <p class="text-blue-200 text-lg leading-relaxed mb-8">
+          Programa de alto nível com sessões exclusivas sobre ferrovias, portos, rodovias e logística nacional. Conteúdo produzido por especialistas com décadas de experiência no setor.
+        </p>
+        <div class="grid grid-cols-2 gap-4 mb-8">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 bg-gold-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
+              <svg class="w-4 h-4 text-gold-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+            </div>
+            <span class="text-blue-200 text-sm">Sessões gravadas disponíveis</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 bg-gold-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
+              <svg class="w-4 h-4 text-gold-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+            </div>
+            <span class="text-blue-200 text-sm">Material em PDF para download</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 bg-gold-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
+              <svg class="w-4 h-4 text-gold-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+            </div>
+            <span class="text-blue-200 text-sm">Edições desde 2023</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 bg-gold-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
+              <svg class="w-4 h-4 text-gold-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+            </div>
+            <span class="text-blue-200 text-sm">Acesso por área de membros</span>
+          </div>
+        </div>
+        <a href="mastermind.html" class="inline-block bg-gold-500 hover:bg-gold-400 text-white font-semibold px-8 py-3.5 rounded-lg transition-all hover:shadow-lg">
+          Conhecer o Mastermind
+        </a>
+      </div>
+      <!-- Tracks grid -->
+      <div class="grid grid-cols-2 gap-4">
+        <div class="bg-white/10 border border-white/20 rounded-xl p-5 hover:bg-white/15 transition-colors cursor-pointer">
+          <div class="text-2xl mb-2">🏗️</div>
+          <h4 class="text-white font-semibold text-sm mb-1">Infra 2023</h4>
+          <p class="text-blue-300 text-xs">Primeira edição do programa</p>
+        </div>
+        <div class="bg-white/10 border border-white/20 rounded-xl p-5 hover:bg-white/15 transition-colors cursor-pointer">
+          <div class="text-2xl mb-2">🚂</div>
+          <h4 class="text-white font-semibold text-sm mb-1">Infra 2024</h4>
+          <p class="text-blue-300 text-xs">Ferrovias e multimodalidade</p>
+        </div>
+        <div class="bg-white/10 border border-white/20 rounded-xl p-5 hover:bg-white/15 transition-colors cursor-pointer">
+          <div class="text-2xl mb-2">⚓</div>
+          <h4 class="text-white font-semibold text-sm mb-1">Portos</h4>
+          <p class="text-blue-300 text-xs">Logística portuária nacional</p>
+        </div>
+        <div class="bg-gold-500/20 border border-gold-500/40 rounded-xl p-5 cursor-pointer">
+          <div class="text-2xl mb-2">⚡</div>
+          <h4 class="text-gold-400 font-semibold text-sm mb-1">Infra 2026</h4>
+          <p class="text-gold-300/80 text-xs">Em andamento · Acesso ativo</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== NOTÍCIAS ========== -->
+  <section class="py-24 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="flex items-end justify-between mb-12">
+        <div>
+          <div class="gold-line mb-4"></div>
+          <h2 class="font-serif text-4xl font-bold text-navy-900">Últimas Notícias</h2>
+        </div>
+        <a href="#" class="text-gold-500 text-sm font-semibold hover:underline hidden md:block">Ver todas as notícias →</a>
+      </div>
+      <div class="grid md:grid-cols-3 gap-7">
+
+        <!-- Post 1 -->
+        <article class="card-hover bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100">
+          <div class="h-48 bg-gradient-to-br from-navy-900 to-navy-700 flex items-center justify-center">
+            <span class="text-5xl">🚂</span>
+          </div>
+          <div class="p-6">
+            <span class="inline-block bg-gold-500/10 text-gold-500 text-xs font-semibold px-3 py-1 rounded-full mb-3">Notícias</span>
+            <h3 class="font-semibold text-navy-900 text-base leading-snug mb-2">Mastermind da ILC discute projetos e renovações de ferrovias no Brasil</h3>
+            <p class="text-gray-500 text-sm leading-relaxed mb-4">Luis Henrique Baldez apresenta oportunidades e desafios para o setor ferroviário nacional...</p>
+            <div class="flex items-center justify-between">
+              <span class="text-gray-400 text-xs">19 Jun 2023</span>
+              <a href="#" class="text-gold-500 text-xs font-semibold hover:underline">Ler mais →</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Post 2 -->
+        <article class="card-hover bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100">
+          <div class="h-48 bg-gradient-to-br from-blue-800 to-blue-600 flex items-center justify-center">
+            <span class="text-5xl">⚓</span>
+          </div>
+          <div class="p-6">
+            <span class="inline-block bg-gold-500/10 text-gold-500 text-xs font-semibold px-3 py-1 rounded-full mb-3">Notícias</span>
+            <h3 class="font-semibold text-navy-900 text-base leading-snug mb-2">ILC apresenta ameaças e oportunidades para os portos do Nordeste</h3>
+            <p class="text-gray-500 text-sm leading-relaxed mb-4">Análise aprofundada sobre o potencial do setor portuário nordestino frente ao mercado global...</p>
+            <div class="flex items-center justify-between">
+              <span class="text-gray-400 text-xs">19 Jun 2023</span>
+              <a href="#" class="text-xs font-semibold text-gold-500 hover:underline">Ler mais →</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Post 3 -->
+        <article class="card-hover bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100">
+          <div class="h-48 bg-gradient-to-br from-emerald-800 to-emerald-600 flex items-center justify-center">
+            <span class="text-5xl">💡</span>
+          </div>
+          <div class="p-6">
+            <span class="inline-block bg-gold-500/10 text-gold-500 text-xs font-semibold px-3 py-1 rounded-full mb-3">Notícias</span>
+            <h3 class="font-semibold text-navy-900 text-base leading-snug mb-2">Forma inovadora de tratar sobre a infraestrutura e logística</h3>
+            <p class="text-gray-500 text-sm leading-relaxed mb-4">A ILC inaugura um novo modelo de discussão técnica sobre os grandes temas do setor...</p>
+            <div class="flex items-center justify-between">
+              <span class="text-gray-400 text-xs">19 Jun 2023</span>
+              <a href="#" class="text-xs font-semibold text-gold-500 hover:underline">Ler mais →</a>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== CTA ========== -->
+  <section class="py-20 bg-white">
+    <div class="max-w-3xl mx-auto px-6 text-center">
+      <div class="gold-line mx-auto mb-6"></div>
+      <h2 class="font-serif text-4xl font-bold text-navy-900 mb-4">
+        Pronto para elevar seus projetos ao próximo nível?
+      </h2>
+      <p class="text-gray-500 text-lg mb-8">Entre em contato e descubra como a ILC pode transformar sua operação logística.</p>
+      <a href="contato.html" class="inline-block bg-navy-900 hover:bg-navy-800 text-white font-semibold px-10 py-4 rounded-xl transition-all hover:shadow-xl text-lg">
+        Falar com a ILC
+      </a>
+    </div>
+  </section>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="bg-navy-900 text-white pt-16 pb-8">
+    <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-4 gap-10 mb-12">
+      <div class="md:col-span-2">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-10 h-10 bg-gold-500 rounded-lg flex items-center justify-center">
+            <span class="text-white font-serif font-bold text-lg">ILC</span>
+          </div>
+          <div>
+            <p class="text-white font-semibold text-sm">Infraestrutura e</p>
+            <p class="text-gold-400 font-semibold text-sm">Logística Conectada</p>
+          </div>
+        </div>
+        <p class="text-blue-300 text-sm leading-relaxed max-w-sm">
+          O mais novo centro de inteligência e inovação em infraestrutura e logística do Brasil.
+        </p>
+        <p class="text-blue-400 text-xs mt-4">
+          Centro Empresarial Norte, Sl 233/235<br/>SRTVN Qd. 701, Conj. C – Brasília/DF
+        </p>
+      </div>
+      <div>
+        <h4 class="font-semibold text-white mb-4 text-sm uppercase tracking-wider">Links</h4>
+        <ul class="space-y-2">
+          <li><a href="index.html"       class="text-blue-300 hover:text-gold-400 text-sm transition-colors">Home</a></li>
+          <li><a href="mastermind.html"  class="text-blue-300 hover:text-gold-400 text-sm transition-colors">Mastermind</a></li>
+          <li><a href="servicos.html"    class="text-blue-300 hover:text-gold-400 text-sm transition-colors">Serviços</a></li>
+          <li><a href="quem-somos.html"  class="text-blue-300 hover:text-gold-400 text-sm transition-colors">Quem Somos</a></li>
+          <li><a href="contato.html"     class="text-blue-300 hover:text-gold-400 text-sm transition-colors">Contato</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-semibold text-white mb-4 text-sm uppercase tracking-wider">Contato</h4>
+        <ul class="space-y-2 text-sm text-blue-300">
+          <li>(61) 99942-1123</li>
+          <li>(61) 98111-9889</li>
+          <li>(61) 99325-9222</li>
+          <li class="pt-1 text-blue-400 text-xs">gerencia.comercial@ilclog.com</li>
+        </ul>
+      </div>
+    </div>
+    <div class="max-w-7xl mx-auto px-6 pt-6 border-t border-white/10 flex flex-wrap items-center justify-between gap-4">
+      <p class="text-blue-400 text-xs">© 2026 ILC INFRA E LOGÍSTICA · Todos os direitos reservados</p>
+      <div class="flex items-center gap-4">
+        <a href="#" class="text-blue-400 hover:text-gold-400 text-xs transition-colors">LinkedIn</a>
+        <a href="#" class="text-blue-400 hover:text-gold-400 text-xs transition-colors">Instagram</a>
+        <a href="#" class="text-blue-400 hover:text-gold-400 text-xs transition-colors">YouTube</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
