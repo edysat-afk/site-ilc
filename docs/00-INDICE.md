@@ -15,8 +15,10 @@
 | 02 | [02-MAPA-DO-SITE.md](./02-MAPA-DO-SITE.md) | Estrutura completa de páginas, hierarquia de URLs, detalhamento por seção |
 | 03 | [03-REGRAS-DE-NEGOCIO.md](./03-REGRAS-DE-NEGOCIO.md) | Todas as regras de negócio: acesso, formulários, conteúdo, usuários, SEO |
 | 04 | [04-SCHEMA-BANCO-DE-DADOS.md](./04-SCHEMA-BANCO-DE-DADOS.md) | Schema completo PostgreSQL com DDL, índices e ordem de migrations |
-| 05 | [05-STACK-TECNOLOGICA.md](./05-STACK-TECNOLOGICA.md) | Stack recomendada, comparativo atual vs novo, estrutura de projeto, plano de migração |
+| 05 | [05-STACK-TECNOLOGICA.md](./05-STACK-TECNOLOGICA.md) | Stack alvo, estrutura real do repositório e diretrizes de execução |
 | 06 | [06-FLUXOS-E-CASOS-DE-USO.md](./06-FLUXOS-E-CASOS-DE-USO.md) | Casos de uso detalhados, fluxos de autenticação, proteção de rotas |
+| 07 | [07-INFRA-CONTAINERS.md](./07-INFRA-CONTAINERS.md) | Arquitetura Docker: aplicação + PostgreSQL + Redis opcional |
+| 08 | [08-DIRETRIZES-DESIGN-3D.md](./08-DIRETRIZES-DESIGN-3D.md) | Padrões visuais atuais com elementos 3D para evolução das páginas |
 
 ---
 
@@ -35,11 +37,24 @@ WordPress com WPForms Lite. Área de membros via plugin nativo do WordPress.
 ```
 Frontend:  Next.js 15 + TypeScript + Tailwind CSS + shadcn/ui
 Backend:   Next.js API Routes + Drizzle ORM
-Banco:     PostgreSQL (Supabase)
+Banco:     PostgreSQL (container local + managed em produção)
 Auth:      Auth.js v5
 E-mail:    Resend + React Email
 Storage:   Supabase Storage (PDFs e imagens)
-Deploy:    Vercel + GitHub Actions
+Cache:     Redis (opcional por profile)
+Deploy:    Docker/Compose + CI/CD
+```
+
+### Estrutura atual do repositório
+```
+site-ilc/
+├── docs/
+├── prototype/
+├── src/app/
+├── Dockerfile
+├── docker-compose.yml
+├── .env / .env.example
+└── package.json
 ```
 
 ### Volume de conteúdo a migrar
@@ -56,8 +71,8 @@ Deploy:    Vercel + GitHub Actions
 
 ## Próximos Passos Recomendados
 
-1. Validar documentação com o cliente (confirmar regras de negócio)
-2. Definir identidade visual (redesign ou replicar atual?)
-3. Setup do ambiente de desenvolvimento (ver `05-STACK-TECNOLOGICA.md` > Fase 1)
-4. Iniciar migrations do banco de dados
-5. Exportar conteúdo do WordPress atual (wp-export XML) antes de desativar
+1. Validar documentação com o cliente (prioridades e backlog de migração)
+2. Subir stack local em containers (ver `07-INFRA-CONTAINERS.md`)
+3. Evoluir páginas públicas para o padrão de design 3D (ver `08-DIRETRIZES-DESIGN-3D.md`)
+4. Implementar camada de dados (Drizzle + migrations + seeds)
+5. Iniciar migração de conteúdo do WordPress (posts, sessões e PDFs)
